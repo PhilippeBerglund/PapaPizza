@@ -14,8 +14,8 @@ namespace InMemoryDB.Data
             var aUser = new ApplicationUser
             {
 
-                UserName = "student@test.com",
-                Email = "student@test.com",
+                UserName = "student@test.co.uk",
+                Email = "student@test.co.uk",
             };
 
             var r = userManager.CreateAsync(aUser, "Pa$$w0rd");
