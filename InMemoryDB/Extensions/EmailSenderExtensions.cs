@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using InMemoryDB.Services;
+using InMemoryDBPizzeria.Services;
 
-namespace InMemoryDB.Services
+namespace InMemoryDBPizzeria.Services
 {
     public static class EmailSenderExtensions
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace InMemoryDB.Models
+namespace InMemoryDBPizzeria.Models
 {
     public class ErrorViewModel
     {

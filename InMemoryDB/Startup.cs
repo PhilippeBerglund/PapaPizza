@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using InMemoryDB.Data;
-using InMemoryDB.Models;
-using InMemoryDB.Services;
+using InMemoryDBPizzeria.Data;
+using InMemoryDBPizzeria.Models;
+using InMemoryDBPizzeria.Services;
 
-namespace InMemoryDB
+namespace InMemoryDBPizzeria
 {
     public class Startup
     {
@@ -39,12 +39,13 @@ namespace InMemoryDB
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient < UserManager<ApplicationUser>>();
+            services.AddTransient<RoleManager<IdentityRole>>();  // behövs?? 
 
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager )
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext context , RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -65,10 +66,10 @@ namespace InMemoryDB
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Dish}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initializer(userManager);
+            DbInitializer.Initializer( context, userManager, roleManager);
         }
     }
 }
