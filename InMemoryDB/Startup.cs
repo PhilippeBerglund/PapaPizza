@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using InMemoryDBPizzeria.Data;
-using InMemoryDBPizzeria.Models;
-using InMemoryDBPizzeria.Services;
+using PapaPizza.Data;
+using PapaPizza.Models;
+using PapaPizza.Services;
 
-namespace InMemoryDBPizzeria
+namespace PapaPizza
 {
     public class Startup
     {

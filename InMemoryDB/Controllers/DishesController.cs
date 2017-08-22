@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using InMemoryDBPizzeria.Data;
-using InMemoryDBPizzeria.Models;
+using PapaPizza.Data;
+using PapaPizza.Models;
 
-namespace InMemoryDBPizzeria.Controllers
+namespace PapaPizza.Controllers
 {
     public class DishesController : Controller
     {

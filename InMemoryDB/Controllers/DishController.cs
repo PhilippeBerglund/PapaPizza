@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using InMemoryDBPizzeria.Data;
+using PapaPizza.Data;
 
-namespace InMemoryDBPizzeria.Controllers
+namespace PapaPizza.Controllers
 {
     public class DishController : Controller
     {

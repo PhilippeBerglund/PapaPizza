@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using InMemoryDBPizzeria.Models;
-using InMemoryDBPizzeria.Models.ManageViewModels;
-using InMemoryDBPizzeria.Services;
+using PapaPizza.Models;
+using PapaPizza.Models.ManageViewModels;
+using PapaPizza.Services;
 
-namespace InMemoryDBPizzeria.Controllers
+namespace PapaPizza.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

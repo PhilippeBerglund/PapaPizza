@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using InMemoryDBPizzeria.Models;
+using PapaPizza.Models;
 
-namespace InMemoryDBPizzeria.Data
+namespace PapaPizza.Data
 {
     public class DbInitializer
     {
@@ -34,15 +34,15 @@ namespace InMemoryDBPizzeria.Data
             {
                 var cheese = new Ingredient {Name = "Cheese"};
                 var tomato = new Ingredient { Name = "Tomato" };
-                var ham = new Ingredient { Name = "Ham" };
+                var ham = new Ingredient    { Name = "Ham" };
 
-                var capricciosa = new Dish { Name = "Capricciosa", Price = 79 };
-                var margaritha = new Dish { Name = "Margaritha", Price = 72 };
-                var hawaii = new Dish { Name = "Hawaii", Price = 75 };
+                var capricciosa = new Dish  { Name = "Capricciosa", Price = 79 };
+                var margaritha = new Dish   { Name = "Margaritha", Price = 72 };
+                var hawaii = new Dish       { Name = "Hawaii", Price = 75 };
 
-                var capricciosaCheese = new DishIngredient{Dish = capricciosa, Ingredient = cheese};
+                var capricciosaCheese = new DishIngredient {Dish = capricciosa, Ingredient = cheese};
                 var capricciosaTomato = new DishIngredient { Dish = capricciosa, Ingredient = tomato };
-                var capricciosaHam = new DishIngredient { Dish = capricciosa, Ingredient = ham };
+                var capricciosaHam = new DishIngredient    { Dish = capricciosa, Ingredient = ham };
 
                 capricciosa.DishIngredients = new List<DishIngredient>();
                 capricciosa.DishIngredients.Add(capricciosaTomato);

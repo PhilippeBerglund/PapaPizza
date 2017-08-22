@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using InMemoryDBPizzeria.Models;
+using PapaPizza.Models;
 
-namespace InMemoryDBPizzeria.Data
+namespace PapaPizza.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
