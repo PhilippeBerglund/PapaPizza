@@ -38,9 +38,8 @@ namespace PapaPizza
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient < UserManager<ApplicationUser>>();
+            services.AddTransient <UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();  // behövs?? 
-
             services.AddMvc();
         }
 
@@ -66,7 +65,7 @@ namespace PapaPizza
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Dish}/{action=Index}/{id?}");
+                    template: "{controller=Dishes}/{action=Index}/{id?}");
             });
 
             DbInitializer.Initializer( context, userManager, roleManager);
