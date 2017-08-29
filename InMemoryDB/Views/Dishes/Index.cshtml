@@ -33,7 +33,7 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                    <br/>
+                    <br />
                     @foreach (var ingredient in item.DishIngredients)
                     {
                         <span>@ingredient.Ingredient.Name</span>
@@ -44,12 +44,12 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
-                </td>   
-                <td >
+                </td>
+                <td>
                     @if (!User.IsInRole("Admin"))
                     {
-                    <a asp-controller="Dishes" asp-action="Buy">
-                        <i class="glyphicon glyphicon-shopping-cart"></i>
+                        <a asp-action="AddToCart" asp-route-id="@item.DishId">
+                            <i class="glyphicon glyphicon-shopping-cart"></i>
                         </a>
                     }
                 </td>

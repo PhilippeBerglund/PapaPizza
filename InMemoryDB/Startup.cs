@@ -40,11 +40,12 @@ namespace PapaPizza
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient <UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();  // behövs?? 
+            services.AddTransient<IngredientService>();
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext context , RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext context , RoleManager<IdentityRole> roleManager, IngredientService ingredientService)
         {
             if (env.IsDevelopment())
             {
@@ -68,7 +69,7 @@ namespace PapaPizza
                     template: "{controller=Dishes}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initializer( context, userManager, roleManager);
+            DbInitializer.Initializer( context, userManager, roleManager, ingredientService);
         }
     }
 }

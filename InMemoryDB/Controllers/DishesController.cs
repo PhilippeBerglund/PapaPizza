@@ -39,7 +39,7 @@ namespace PapaPizza.Controllers
             {
                 return NotFound();
             }
-
+            var catList = _context.Categories.ToList();    
             var dish = await _context.Dishes
                 .Include(d => d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
@@ -55,6 +55,7 @@ namespace PapaPizza.Controllers
         // GET: Dishes/Create
         public IActionResult Create()
         {
+            //ViewData["ExtraList"] = new SelectList(_context.Ingredients, "IngredientId", "Name");
             //var dish = 0; //= await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
             ViewData["CatList"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();
@@ -65,7 +66,7 @@ namespace PapaPizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish, Category category)
+        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish, Category category, Ingredient ingredient)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +76,7 @@ namespace PapaPizza.Controllers
                     Name = dish.Name,
                     Price = dish.Price,
                     CategoryId = category.CategoryId,
-                    DishIngredients = dish.DishIngredients
+                    DishIngredients = ingredient.DishIngredients
                 };
                // _context.Update(newDish);
 
@@ -175,11 +176,32 @@ namespace PapaPizza.Controllers
             return _context.Dishes.Any(e => e.DishId == id);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Buy (int id)
+
+        // GET: Dishes/AddToCart/6
+        public async Task<IActionResult> AddToCart(int ? id)
         {
-            return RedirectToAction(nameof(Index));
+            var dish = await _context.Dishes
+           .SingleOrDefaultAsync(m => m.DishId == id);
+            if (dish == null)
+            {
+                return NotFound();
+            }
+
+            return View(dish);
+
+            //return RedirectToAction("Index");
+            // return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Dishes/AddToCart/6
+        [HttpPost, ActionName("AddToCart")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart (int id)
+        {
+            var d = id.ToString();
+            
+            return RedirectToAction("Index");
+           // return RedirectToAction(nameof(Index));
         }
     }
 }

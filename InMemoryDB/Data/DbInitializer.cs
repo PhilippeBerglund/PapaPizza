@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using PapaPizza.Models;
+using PapaPizza.Services;
+
 
 namespace PapaPizza.Data
 {
     public class DbInitializer
     {
-        public static void Initializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static void Initializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IngredientService ingredientService)
         {
             var aUser = new ApplicationUser
             {
@@ -48,9 +50,14 @@ namespace PapaPizza.Data
 
                 var cheese = new Ingredient { Name = "Cheese" };
                 var tomato = new Ingredient { Name = "Tomato" };
-                var ham = new Ingredient { Name = "Ham" };
+                var ham = new Ingredient { Name = "Parma-Ham" };
                 var mushroom = new Ingredient { Name = "Mushroom" };
                 var pineapple = new Ingredient { Name = "Pineapple" };
+                var ruccola = new Ingredient { Name = "Ruccola" };
+                var salami = new Ingredient { Name = "Salami" };
+                var sdtomato = new Ingredient { Name = "Sun dried tomatos" };
+                var olives = new Ingredient { Name = "Olives" };
+                var parmesan = new Ingredient { Name = "Parmesan" };
 
                 var capricciosaCheese = new DishIngredient { Dish = capricciosa, Ingredient = cheese };
                 var capricciosaTomato = new DishIngredient { Dish = capricciosa, Ingredient = tomato };
@@ -81,9 +88,18 @@ namespace PapaPizza.Data
                     hawaiiTomato, hawaiiCheese, hawaiiHam, hawaiiPineapple
                 };
 
-                //context.AddRange(  capricciosaTomato, capricciosaCheese, capricciosaHam
-                //                 , margarithaCheese, margarithaHam, margarithaTomato
-                //                 , hawaiiTomato, hawaiiCheese, hawaiiHam, hawaiiPineapple);
+                context.AddRange(
+                                cheese,
+                                tomato,
+                                ham,
+                                mushroom,
+                                pineapple,
+                                ruccola,
+                                salami,
+                                sdtomato,
+                                olives,
+                                parmesan
+                                );
 
                 context.AddRange(capricciosa, margaritha, hawaii, gelatoA, gelatoB, coffeA, coffeB);
                 context.SaveChanges();
