@@ -30,13 +30,18 @@
         </dd>
     </dl>
 </div>
-@foreach(var item in Model.DishIngredients)
+<h5><b>Ingredients:</b></h5>
+@foreach(var item in Model.DishIngredients.Where(di=> di.checkboxAnswer))
     {
-        <h4>@item.Ingredient.Name</h4>
+        <span>@item.Ingredient.Name </span>
+        <br/>
+        @*<span>@IngredientService.AddedIngredients(item.DishId)</span>*@
+
        @* @foreach (var cat in item.Dish.Category.Name)
     {
         <span>@cat</span>
     }*@
+    
 
 }
 

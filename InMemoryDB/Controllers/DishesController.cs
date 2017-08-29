@@ -25,7 +25,6 @@ namespace PapaPizza.Controllers
 
         // GET: Dishes
         public async Task<IActionResult> Index()
-
         {
             var catList = _context.Categories.ToList();
 
@@ -37,7 +36,7 @@ namespace PapaPizza.Controllers
         }
 
         // GET: Dishes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id )
         {
             if (id == null)
             {
@@ -48,7 +47,8 @@ namespace PapaPizza.Controllers
                 .Include(d => d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
                 .SingleOrDefaultAsync(m => m.DishId == id);
-            if (dish == null)
+
+                if (dish == null)
             {
                 return NotFound();
             }
