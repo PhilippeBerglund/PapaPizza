@@ -59,19 +59,19 @@ namespace PapaPizza.Data
                 var olives = new Ingredient { Name = "Olives" };
                 var parmesan = new Ingredient { Name = "Parmesan" };
 
-                var capricciosaCheese = new DishIngredient { Dish = capricciosa, Ingredient = cheese };
-                var capricciosaTomato = new DishIngredient { Dish = capricciosa, Ingredient = tomato };
-                var capricciosaHam = new DishIngredient { Dish = capricciosa, Ingredient = ham };
-                var capricciosaShroom = new DishIngredient { Dish = capricciosa, Ingredient = mushroom };
+                var capricciosaCheese = new DishIngredient { Dish = capricciosa, Ingredient = cheese, checkboxAnswer = true };
+                var capricciosaTomato = new DishIngredient { Dish = capricciosa, Ingredient = tomato, checkboxAnswer = true };
+                var capricciosaHam = new DishIngredient { Dish = capricciosa, Ingredient = ham, checkboxAnswer = true };
+                var capricciosaShroom = new DishIngredient { Dish = capricciosa, Ingredient = mushroom, checkboxAnswer = true };
 
-                var margarithaCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese };
-                var margarithaTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato };
-                var margarithaHam = new DishIngredient { Dish = margaritha, Ingredient = ham };
+                var margarithaCheese = new DishIngredient { Dish = margaritha, Ingredient = cheese, checkboxAnswer = true };
+                var margarithaTomato = new DishIngredient { Dish = margaritha, Ingredient = tomato, checkboxAnswer = true };
+                var margarithaHam = new DishIngredient { Dish = margaritha, Ingredient = ham, checkboxAnswer = true };
 
-                var hawaiiCheese = new DishIngredient { Dish = hawaii, Ingredient = cheese };
-                var hawaiiTomato = new DishIngredient { Dish = hawaii, Ingredient = tomato };
-                var hawaiiHam = new DishIngredient { Dish = hawaii, Ingredient = ham };
-                var hawaiiPineapple = new DishIngredient { Dish = hawaii, Ingredient = pineapple };
+                var hawaiiCheese = new DishIngredient { Dish = hawaii, Ingredient = cheese, checkboxAnswer = true };
+                var hawaiiTomato = new DishIngredient { Dish = hawaii, Ingredient = tomato, checkboxAnswer = true };
+                var hawaiiHam = new DishIngredient { Dish = hawaii, Ingredient = ham, checkboxAnswer = true };
+                var hawaiiPineapple = new DishIngredient { Dish = hawaii, Ingredient = pineapple, checkboxAnswer = true };
 
 
                 capricciosa.DishIngredients = new List<DishIngredient> {

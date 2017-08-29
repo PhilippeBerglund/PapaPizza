@@ -1,5 +1,5 @@
 ﻿@model PapaPizza.Models.Dish
-@inject PapaPizza.Services.IngredientService IngrService
+@inject PapaPizza.Services.IngredientService IngredientService
 
 @{
     ViewData["Title"] = "Create";
@@ -22,12 +22,11 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @foreach (var item in IngrService.GetIngredients())
+                @foreach (var item in IngredientService.GetIngredients())
                 {
-                    <input type="checkbox" name="@item.Name" value="" />
-                    <label asp-for="@item.Name">@item.Name</label>
-                      
-
+                    <input type="checkbox" name= "checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                    <label asp-for="@item.Name">@item.Name</label>    
+                    <br />
                 }
             </div>
             @*<input type="checkbox" name="name" value="id" class="form-control" asp-for="" asp-items="ViewBag.ExtraList">

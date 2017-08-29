@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<PapaPizza.Models.Dish>
+@inject PapaPizza.Services.IngredientService IngredientService
 
 @{
     ViewData["Title"] = "Index";
@@ -34,10 +35,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                     <br />
-                    @foreach (var ingredient in item.DishIngredients)
+                    @*@foreach (var ingredient in item.DishIngredients)
                     {
                         <span>@ingredient.Ingredient.Name</span>
-                    }
+                    }*@
+                    @IngredientService.AddedIngredients(item.DishId)
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Category.Name)

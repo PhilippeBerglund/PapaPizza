@@ -12,5 +12,8 @@ namespace PapaPizza.Models
         public int IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
 
+        public bool checkboxAnswer { get; set; }
+
+
     }
 }
