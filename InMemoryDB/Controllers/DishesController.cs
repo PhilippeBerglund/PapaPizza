@@ -105,9 +105,17 @@ namespace PapaPizza.Controllers
             return NotFound();
         }
 
-        var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
-        ViewData["CatList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
-        if (dish == null)
+        //var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
+        //ViewData["CatList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
+            //
+            var dish = await _context.Dishes
+               .Include(d => d.DishIngredients)
+               .ThenInclude(di => di.Ingredient)
+               .SingleOrDefaultAsync(m => m.DishId == id);
+
+            ViewData["CatList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
+            //
+            if (dish == null)
         {
             return NotFound();
         }
@@ -135,8 +143,7 @@ namespace PapaPizza.Controllers
                     DishId = dish.DishId,
                     Name = dish.Name,
                     Price = dish.Price,
-                    CategoryId = category.CategoryId
-                ,
+                    CategoryId = category.CategoryId,
                     DishIngredients = dish.DishIngredients
                 };
                 _context.Update(newDish);

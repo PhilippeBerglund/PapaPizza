@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
 <h2>Edit</h2>
 
 <h4>Dish</h4>
@@ -24,17 +23,35 @@
             <div class="form-group">
                 @foreach (var item in IngredientService.GetIngredients())
                 {
-                    @*@if (item.DishIngredients.Exists(x => x.checkboxAnswer== true))
-                    {
-                        
+                  
+                @*@Model.DishIngredients.Select(x=>x.Ingredient.Name) test </span>*@
 
-                    }*@
-                    <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-                    <label asp-for="@item.Name">@item.Name</label>
-                    <br />
+
+                    @*@if(item.IngredientId == Model.DishIngredients.Where(x=> x.Ingredient.IngredientId))
+                    {
+                        <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@foreach" checked />
+                    }
+
+                    else
+                    {*@
+                        <input type="checkbox"  name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                        <label asp-for="@item.Name">@item.Name</label>
+                        <br />
+
+                    @*@if (item.DishIngredients.Where(x => x.checkboxAnswer) == Model.DishIngredients.Where(y => y.checkboxAnswer))
+                        {
+                            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" checked />
+
+                        }*@
                 }
-                
-                    
+                @foreach (var ingr in Model.DishIngredients)
+                {
+                    <input type="checkbox" name="checkboxes-@ingr.Ingredient.Name" value="checkboxes-@ingr.Ingredient.Name" checked />
+                    <label asp-for="@ingr.Ingredient.Name">@ingr.Ingredient.Name</label>
+
+                }
+
+
             </div>
 
 

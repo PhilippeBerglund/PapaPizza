@@ -33,7 +33,14 @@
                     <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Home</a></li>
                     @if (User.IsInRole("Admin"))
                     {
-                        <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Dishes</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+                            <ul class=" dropdown-menu">
+                                <li><a asp-controller="Dishes" asp-action="Index">Dishes</a></li>
+                                <li><a asp-controller="Dishes" asp-action="Index">Dishes</a></li>
+
+                            </ul>
+                        </li>
                     }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
