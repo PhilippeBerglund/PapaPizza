@@ -86,7 +86,7 @@ namespace PapaPizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IngredientId,Name")] Ingredient ingredient)
+        public async Task<IActionResult> Edit(int id, [Bind("IngredientId,Name, Price")] Ingredient ingredient)
         {
             if (id != ingredient.IngredientId)
             {

@@ -8,61 +8,76 @@
 <h4>Dish</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit">
-            <div class="form-group">
-                <select class="form-control" asp-for="CategoryId" asp-items="ViewBag.CatList"></select>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Category"></label>
+                        <select class="form-control" asp-for="CategoryId" asp-items="ViewBag.CatList"></select>
+                    </div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="DishId" />
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DishId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @foreach (var item in IngredientService.GetIngredients())
-                {
-                  
-                @*@Model.DishIngredients.Select(x=>x.Ingredient.Name) test </span>*@
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @foreach (var item in IngredientService.GetIngredients())
+                        {
+
+                            @*@Model.DishIngredients.Select(x=>x.Ingredient.Name) test </span>*@
 
 
-                    @*@if(item.IngredientId == Model.DishIngredients.Where(x=> x.Ingredient.IngredientId))
-                    {
-                        <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@foreach" checked />
-                    }
+                            @*@if(item.IngredientId == Model.DishIngredients.Where(x=> x.Ingredient.IngredientId))
+                        {
+                            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@foreach" checked />
+                        }
 
-                    else
-                    {*@
-                        <input type="checkbox"  name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-                        <label asp-for="@item.Name">@item.Name</label>
-                        <br />
+                        else
+                        {*@
+                            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                            <label asp-for="@item.Name">@item.Name</label>
+                            <br />
 
-                    @*@if (item.DishIngredients.Where(x => x.checkboxAnswer) == Model.DishIngredients.Where(y => y.checkboxAnswer))
+                            @*@if (item.DishIngredients.Where(x => x.checkboxAnswer) == Model.DishIngredients.Where(y => y.checkboxAnswer))
                         {
                             <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" checked />
 
                         }*@
-                }
-                @foreach (var ingr in Model.DishIngredients)
-                {
-                    <input type="checkbox" name="checkboxes-@ingr.Ingredient.Name" value="checkboxes-@ingr.Ingredient.Name" checked />
-                    <label asp-for="@ingr.Ingredient.Name">@ingr.Ingredient.Name</label>
-
-                }
-
-
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div style="background-color: antiquewhite">
+                        @foreach (var ingr in Model.DishIngredients)
+                        {
+                            @if (ingr.checkboxAnswer)
+                            {
+                            <input type="checkbox" name="checkboxes-@ingr.Ingredient.Name" value="checkboxes-@ingr.Ingredient.Name" checked />
+                            <label asp-for="@ingr.Ingredient.Name">@ingr.Ingredient.Name</label>
+                            <br/>
+                                }
+                            }
+                    </div>
+                </div>
             </div>
-
-
-
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
             </div>
         </form>
     </div>
