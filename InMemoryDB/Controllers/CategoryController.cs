@@ -34,6 +34,7 @@ namespace PapaPizza.Controllers
             }
 
             var category = await _context.Categories
+                .Include(d=>d.Dishes)
                 .SingleOrDefaultAsync(m => m.CategoryId == id);
             if (category == null)
             {

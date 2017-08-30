@@ -48,16 +48,16 @@ namespace PapaPizza.Data
                 var coffeA = new Dish { Name = "Espresso", Category = coffee, Price = 21 };
                 var coffeB = new Dish { Name = "Cappuccino", Category = coffee, Price = 37 };
 
-                var cheese = new Ingredient { Name = "Cheese" };
-                var tomato = new Ingredient { Name = "Tomato" };
-                var ham = new Ingredient { Name = "Parma-Ham" };
-                var mushroom = new Ingredient { Name = "Mushroom" };
-                var pineapple = new Ingredient { Name = "Pineapple" };
-                var ruccola = new Ingredient { Name = "Ruccola" };
-                var salami = new Ingredient { Name = "Salami" };
-                var sdtomato = new Ingredient { Name = "Sun dried tomatos" };
-                var olives = new Ingredient { Name = "Olives" };
-                var parmesan = new Ingredient { Name = "Parmesan" };
+                var cheese = new Ingredient { Name = "Mozarella" , Price = 10 };
+                var tomato = new Ingredient { Name = "Tomato", Price = 10 };
+                var ham = new Ingredient { Name = "Parma-Ham", Price = 10 };
+                var mushroom = new Ingredient { Name = "Mushroom", Price = 10 };
+                var pineapple = new Ingredient { Name = "Pineapple", Price = 10 };
+                var ruccola = new Ingredient { Name = "Ruccola", Price = 10 };
+                var salami = new Ingredient { Name = "Salami", Price = 10 };
+                var sdtomato = new Ingredient { Name = "Sun dried tomatos", Price = 10 };
+                var olives = new Ingredient { Name = "Olives", Price = 10 };
+                var parmesan = new Ingredient { Name = "Parmesan", Price = 10 };
 
                 var capricciosaCheese = new DishIngredient { Dish = capricciosa, Ingredient = cheese, checkboxAnswer = true };
                 var capricciosaTomato = new DishIngredient { Dish = capricciosa, Ingredient = tomato, checkboxAnswer = true };
