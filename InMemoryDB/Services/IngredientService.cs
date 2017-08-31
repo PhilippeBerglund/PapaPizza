@@ -19,7 +19,7 @@ namespace PapaPizza.Services
         // Get all Ingredients 
         public List<Models.Ingredient> GetIngredients()
         { 
-            return  _context.Ingredients.ToList(); ;
+            return  _context.Ingredients.ToList(); // .OrderBy(x => x.Name)  
         }
 
         // Get Checked Ingredients

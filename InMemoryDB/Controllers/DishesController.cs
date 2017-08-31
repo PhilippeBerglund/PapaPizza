@@ -36,7 +36,7 @@ namespace PapaPizza.Controllers
         }
 
         // GET: Dishes/Details/5
-        public async Task<IActionResult> Details(int? id )
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -48,7 +48,7 @@ namespace PapaPizza.Controllers
                 .ThenInclude(di => di.Ingredient)
                 .SingleOrDefaultAsync(m => m.DishId == id);
 
-                if (dish == null)
+            if (dish == null)
             {
                 return NotFound();
             }
@@ -91,22 +91,22 @@ namespace PapaPizza.Controllers
                     _context.DishIngredients.Add(dishIngredient);
                 }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        } 
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
             return View(dish);
-    }
-
-    // GET: Dishes/Edit/5
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
         }
 
-        //var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
-        //ViewData["CatList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
+        // GET: Dishes/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
+            //ViewData["CatList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
             //
             var dish = await _context.Dishes
                .Include(d => d.DishIngredients)
@@ -116,115 +116,138 @@ namespace PapaPizza.Controllers
             ViewData["CatList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
             //
             if (dish == null)
-        {
-            return NotFound();
-        }
-        return View(dish);
-    }
-
-    // POST: Dishes/Edit/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price")] Dish dish, Category category)
-    {
-        if (id != dish.DishId)
-        {
-            return NotFound();
+            {
+                return NotFound();
+            }
+            return View(dish);
         }
 
-        if (ModelState.IsValid)
+        // POST: Dishes/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
         {
-            try
+            if (id != dish.DishId)
             {
-                var newDish = new Dish
-                {
-                    DishId = dish.DishId,
-                    Name = dish.Name,
-                    Price = dish.Price,
-                    CategoryId = category.CategoryId,
-                    DishIngredients = dish.DishIngredients
-                };
-                _context.Update(newDish);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+
+            if (ModelState.IsValid)
             {
-                if (!DishExists(dish.DishId))
+                try
                 {
-                    return NotFound();
+                    var dishToEdit = await _context.Dishes.
+                        Include(d => d.DishIngredients).
+                        SingleOrDefaultAsync(m => m.DishId == id);
+                    dishToEdit.Name = dish.Name;
+                    dishToEdit.Price = dish.Price;
+                    dishToEdit.CategoryId = dish.CategoryId;
+                    foreach (var dishIngredient in dishToEdit.DishIngredients)
+                    {
+                        _context.Remove(dishIngredient);
+                    }
+                        
+                    await _context.SaveChangesAsync();
+                    //var newDish = new Dish
+                    //{
+                    //    DishId = dish.DishId,
+                    //    Name = dish.Name,
+                    //    Price = dish.Price,
+                    //    CategoryId = category.CategoryId,
+                    //    DishIngredients = dish.DishIngredients
+                    //};
+                    foreach (var ingredient in _ingredientService.GetIngredients())
+                    {
+                        var dishIngredient = new DishIngredient
+                        {
+                            Ingredient = ingredient,
+                            Dish = dish,
+                            checkboxAnswer = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}")
+                        };
+
+                        //_context.Update(newDish);
+                        _context.DishIngredients.Add(dishIngredient);
+                        await _context.SaveChangesAsync();
+                    }
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!DishExists(dish.DishId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
+            return View(dish);
+        }
+
+        // GET: Dishes/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var dish = await _context.Dishes
+                .SingleOrDefaultAsync(m => m.DishId == id);
+            if (dish == null)
+            {
+                return NotFound();
+            }
+
+            return View(dish);
+        }
+
+        // POST: Dishes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
+            _context.Dishes.Remove(dish);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(dish);
-    }
 
-    // GET: Dishes/Delete/5
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
+        private bool DishExists(int id)
         {
-            return NotFound();
+            return _context.Dishes.Any(e => e.DishId == id);
         }
 
-        var dish = await _context.Dishes
-            .SingleOrDefaultAsync(m => m.DishId == id);
-        if (dish == null)
+
+        // GET: Dishes/AddToCart/6
+        public async Task<IActionResult> AddToCart(int? id)
         {
-            return NotFound();
+            var dish = await _context.Dishes
+           .SingleOrDefaultAsync(m => m.DishId == id);
+            if (dish == null)
+            {
+                return NotFound();
+            }
+
+            return View(dish);
+
+            //return RedirectToAction("Index");
+            // return RedirectToAction(nameof(Index));
         }
 
-        return View(dish);
-    }
-
-    // POST: Dishes/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
-        _context.Dishes.Remove(dish);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool DishExists(int id)
-    {
-        return _context.Dishes.Any(e => e.DishId == id);
-    }
-
-
-    // GET: Dishes/AddToCart/6
-    public async Task<IActionResult> AddToCart(int? id)
-    {
-        var dish = await _context.Dishes
-       .SingleOrDefaultAsync(m => m.DishId == id);
-        if (dish == null)
+        // POST: Dishes/AddToCart/6
+        [HttpPost, ActionName("AddToCart")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart(int id)
         {
-            return NotFound();
+            var d = id.ToString();
+
+            return RedirectToAction("Index");
+            // return RedirectToAction(nameof(Index));
         }
-
-        return View(dish);
-
-        //return RedirectToAction("Index");
-        // return RedirectToAction(nameof(Index));
     }
-
-    // POST: Dishes/AddToCart/6
-    [HttpPost, ActionName("AddToCart")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddToCart(int id)
-    {
-        var d = id.ToString();
-
-        return RedirectToAction("Index");
-        // return RedirectToAction(nameof(Index));
-    }
-}
 }
