@@ -31,52 +31,37 @@
                         @foreach (var item in IngredientService.GetIngredients())
                         {
 
-                            @*@Model.DishIngredients.Select(x=>x.Ingredient.Name) test </span>*@
+                            if (Model.DishIngredients.Any(x => x.IngredientId == item.IngredientId && x.checkboxAnswer))
+                            {
 
+                                <input checked type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                                <label asp-for="@item.Name">@item.Name</label>
+                                <br />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                                <label asp-for="@item.Name">@item.Name</label>
+                                <br />
 
-                            @*@if(item.IngredientId == Model.DishIngredients.Where(x=> x.Ingredient.IngredientId))
-                        {
-                            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@foreach" checked />
-                        }
+                            }
 
-                        else
-                        {*@
-                        if (Model.DishIngredients.Any(x => x.IngredientId == item.IngredientId && x.checkboxAnswer))
-                        {
-
-                            <input checked type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-                            <label asp-for="@item.Name">@item.Name</label>
-                            <br />
-                        }
-                        else
-                        {
-                            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-                            <label asp-for="@item.Name">@item.Name</label>
-                            <br />
-
-                        }
-
-                            @*@if (item.DishIngredients.Where(x => x.checkboxAnswer) == Model.DishIngredients.Where(y => y.checkboxAnswer))
-                        {
-                            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" checked />
-
-                        }*@
                         }
                     </div>
                 </div>
                 @*<div class="col-md-4">
-                    <div style="background-color: antiquewhite">
-                        @foreach (var ingr in Model.DishIngredients)
-                        {
-                            @if (ingr.checkboxAnswer)
+                        <div style="background-color: antiquewhite">
+                            @foreach (var ingr in Model.DishIngredients)
                             {
-                            <input type="checkbox" name="checkboxes-@ingr.Ingredient.Name" value="checkboxes-@ingr.Ingredient.Name" checked />
-                            <label asp-for="@ingr.Ingredient.Name">@ingr.Ingredient.Name</label>
-                            <br/>
+                                @if (ingr.checkboxAnswer)
+                                {
+                                <input type="checkbox" name="checkboxes-@ingr.Ingredient.Name" value="checkboxes-@ingr.Ingredient.Name" checked />
+                                <label asp-for="@ingr.Ingredient.Name">@ingr.Ingredient.Name</label>
+                                <br/>
+                                    }
                                 }
-                            }
-                    </div>
-                </div>*@
+                        </div>
+                    </div>*@
             </div>
             <div class="row">
                 <div class="col-md-6">

@@ -5,11 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PapaPizza.Models;
+using Microsoft.Extensions.Logging;
 
 namespace PapaPizza.Controllers
 {
     public class HomeController : Controller
     {
+        public HomeController(ILogger<HomeController> logger)
+        {
+            logger.LogCritical("Critical");   // --> loggerTest
+        }
+
         public IActionResult Index()
         {
             return View();

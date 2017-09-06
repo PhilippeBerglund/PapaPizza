@@ -47,8 +47,18 @@ namespace PapaPizza.Data
                .HasOne(ci => ci.Ingredient)
                .WithMany(i => i.CartItemIngredients)
                .HasForeignKey(ci => ci.IngredientId);
-            
-           
+
+
+            ////->
+            //builder.Entity<CartItem>()
+            //    .HasKey(ci => new { ci.CartId, ci.DishId });
+
+            //builder.Entity<Cart>()
+            //    .HasKey(c => new { c.CartId });
+            //<-
+
+
+
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

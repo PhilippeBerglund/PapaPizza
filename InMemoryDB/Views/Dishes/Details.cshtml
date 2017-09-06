@@ -35,15 +35,7 @@
     {
         <span>@item.Ingredient.Name </span>
         <br/>
-        @*<span>@IngredientService.AddedIngredients(item.DishId)</span>*@
-
-       @* @foreach (var cat in item.Dish.Category.Name)
-    {
-        <span>@cat</span>
-    }*@
-    
-
-}
+    }
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model.DishId">Edit</a> |
