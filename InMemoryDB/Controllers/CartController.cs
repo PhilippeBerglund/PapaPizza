@@ -20,62 +20,27 @@ namespace PapaPizza.Controllers
         private readonly CartService _cartService;
         //private readonly HttpContext httpContext;
 
-        //private readonly Cart cart; 
-
-
         public CartController(ApplicationDbContext context)// CartService cartService
         {
             //_cartService = cartService;
             _context = context;
         }
 
-        //public int CartId { get; set; }
-
-        //public List<CartItem> CartItems { get; set; }
-
-        //public static Cart GetCart(IServiceProvider serviceProvider)
-        //{
-        //    ISession session = serviceProvider.GetRequiredService<HttpContextAccessor>()?
-        //        .HttpContext.Session;
-
-        //    var context = serviceProvider.GetService<ApplicationDbContext>();
-        //    int cartId = session.GetInt32("CartId") ?? Convert.ToInt32(Guid.NewGuid());
-
-        //    session.SetString("CartId", cartId.ToString());
-
-        //    return new Cart(context) { CartId = cartId };
-        //}
-
-        //public Dish AddToCart(Dish dish, int amount)
-        //{
-        //    var cartItem = _context.CartItems.SingleOrDefault(
-        //        c => c.Dish.DishId == dish.DishId && c.CartId == CartId);
-
-        //    if (cartItem == null)
-        //    {
-        //        cartItem = new CartItem
-        //        {
-        //            CartId = CartId,
-        //            Dish = dish,
-        //            Quantity = 1
-        //        };
-
-        //        _context.CartItems.Add(cartItem);
-        //    }
-
-        //    else
-        //    {
-        //        cartItem.Quantity++;
-        //    }
-        //    _context.SaveChanges();
-        //    return dish;
-        //}
 
 
-        // GET: Carts
+        // GET: CartItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Carts.ToListAsync());
+            var id = HttpContext.Session.GetInt32("CartSession");
+            if (id != null) {
+                var cartItems = await _context.CartItems
+                .Include(c => c.Dish)
+                .ThenInclude(d => d.DishIngredients)
+                .SingleOrDefaultAsync(c => c.CartItemId == id);
+            }
+            //var korgEnhet = cartItems;
+
+            return View(await _context.CartItems.ToListAsync());
         }
 
 
@@ -90,28 +55,69 @@ namespace PapaPizza.Controllers
                 return NotFound();
             }
 
-            //List<DishIngredient> ingredients = new List<DishIngredient>();
             var dish = await _context.Dishes
-             .Include(d => d.DishIngredients)
-             .ThenInclude(di => di.Ingredient)
-             .SingleOrDefaultAsync(m => m.DishId == id);
+           .Include(d => d.DishIngredients)
+           .ThenInclude(di => di.Ingredient)
+           .SingleOrDefaultAsync(m => m.DishId == id);
 
+            var cartID = HttpContext.Session.GetInt32("CartSession");
 
-            List<Dish> shoppingCart;
+            Cart cart;
 
-            if (HttpContext.Session.GetString("CartSession") == null)
+            if (cartID == null)
             {
-                shoppingCart = new List<Dish>();
+                cart = new Cart
+                {
+                    CartItems = new List<CartItem>()
+                };
+                _context.Cart.Add(cart);
             }
             else
             {
-                var temp = HttpContext.Session.GetString("CartSession");
-                shoppingCart = JsonConvert.DeserializeObject<List<Dish>>(temp);
-            }
-            shoppingCart.Add(dish);
+                cart = _context.Cart.Include(c => c.CartItems)
+                    .SingleOrDefault(c => c.CartId == cartID);
 
-            var serializedValue = JsonConvert.SerializeObject(shoppingCart);
-            HttpContext.Session.SetString("CartSession", serializedValue);
+                //var temp = HttpContext.Session.GetString("CartSession");
+
+                //cart = JsonConvert.DeserializeObject<List<Dish>>(temp);
+            }
+
+            CartItem cartItem = new CartItem
+            {
+                Dish = dish,
+                Cart = cart,
+                CartItemIngredients = new List<CartItemIngredient>(),
+                Quantity = 1
+            };
+
+            foreach (var item in dish.DishIngredients)
+            {
+                var cartItemIngredient = new CartItemIngredient
+                {
+                    Ingredient = item.Ingredient,
+                    CartItem = cartItem
+                };
+                cartItem.CartItemIngredients.Add(cartItemIngredient);
+            }
+
+
+            cart.CartItems.Add(cartItem);
+            _context.SaveChanges();
+
+            HttpContext.Session.SetInt32("CartSession", cart.CartId);
+
+
+
+
+            // cartItems.Add(new Dish{ });
+
+            // todo: fix 
+            //ViewBag.CartSummary = string.Join("\n", shoppingCart.Select(c => c.Name).Distinct());
+
+            //var serializedValue = JsonConvert.SerializeObject(shoppingCart);
+            //HttpContext.Session.SetInt32("CartSession", cart.CartId);
+
+
 
             return RedirectToAction("Index", "Dishes");
 
@@ -171,7 +177,7 @@ namespace PapaPizza.Controllers
                 return NotFound();
             }
 
-            var cart = await _context.Carts.SingleOrDefaultAsync(m => m.CartId == id);
+            var cart = await _context.Cart.SingleOrDefaultAsync(m => m.CartId == id);
             if (cart == null)
             {
                 return NotFound();
@@ -222,7 +228,7 @@ namespace PapaPizza.Controllers
                 return NotFound();
             }
 
-            var cart = await _context.Carts
+            var cart = await _context.Cart
                 .SingleOrDefaultAsync(m => m.CartId == id);
             if (cart == null)
             {
@@ -237,15 +243,15 @@ namespace PapaPizza.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cart = await _context.Carts.SingleOrDefaultAsync(m => m.CartId == id);
-            _context.Carts.Remove(cart);
+            var cart = await _context.Cart.SingleOrDefaultAsync(m => m.CartId == id);
+            _context.Cart.Remove(cart);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CartExists(int id)
         {
-            return _context.Carts.Any(e => e.CartId == id);
+            return _context.Cart.Any(e => e.CartId == id);
         }
 
     }

@@ -78,7 +78,7 @@ namespace PapaPizza.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DishId,Name,Price, CategoryId")] Dish dish, IFormCollection form)
         {
-            //if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 foreach (var ingredient in _ingredientService.GetIngredients())
                 {
@@ -94,7 +94,7 @@ namespace PapaPizza.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(dish);
+           return View(dish);
         }
 
         // GET: Dishes/Edit/5

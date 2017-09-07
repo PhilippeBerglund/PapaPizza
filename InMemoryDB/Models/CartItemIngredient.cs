@@ -8,7 +8,7 @@ namespace PapaPizza.Models
 {
     public class CartItemIngredient
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         public int CartItemId { get; set; }
         public CartItem CartItem { get; set; }
         public int IngredientId { get; set; }

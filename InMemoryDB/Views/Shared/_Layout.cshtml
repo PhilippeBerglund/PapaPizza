@@ -36,16 +36,15 @@
                     <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Home</a></li>
                     @*<li><a asp-area="" asp-controller="Cart" asp-action="Index">Cart</a></li>*@
                     <li>
-                        <a asp-controller="Cart" asp-action="Index">
+                        <a asp-controller="Cart" asp-action="Index" title="@ViewBag.CartSummary">
                             <span class="glyphicon glyphicon-shopping-cart"></span>
-
                             @{
                                 var temp = Context.Session.GetString("CartSession");
 
                                 if (temp != null)
                                 {
-                                    var cart = JsonConvert.DeserializeObject<List<Dish>>(temp);
-                                    <span>@cart.Count</span>
+                                  //  var cart = JsonConvert.DeserializeObject<List<CartItem>>(temp);
+                                   // <span>@cart.Count</span>
                                 }
                             }
                         </a>

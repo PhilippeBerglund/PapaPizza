@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PapaPizza", "InMemoryDB\PapaPizza.csproj", "{3749D8C7-874D-4E98-9D46-004DEEEDBD3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapaPizzaTestXunit", "PapaPizzaTestXunit\PapaPizzaTestXunit.csproj", "{91BBEE55-B34E-48AD-8B40-C2C7F0D78886}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,12 @@ Global
 		{3749D8C7-874D-4E98-9D46-004DEEEDBD3D}.LocalIIS|Any CPU.Build.0 = LocalIIS|Any CPU
 		{3749D8C7-874D-4E98-9D46-004DEEEDBD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3749D8C7-874D-4E98-9D46-004DEEEDBD3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91BBEE55-B34E-48AD-8B40-C2C7F0D78886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91BBEE55-B34E-48AD-8B40-C2C7F0D78886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91BBEE55-B34E-48AD-8B40-C2C7F0D78886}.LocalIIS|Any CPU.ActiveCfg = Debug|Any CPU
+		{91BBEE55-B34E-48AD-8B40-C2C7F0D78886}.LocalIIS|Any CPU.Build.0 = Debug|Any CPU
+		{91BBEE55-B34E-48AD-8B40-C2C7F0D78886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91BBEE55-B34E-48AD-8B40-C2C7F0D78886}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

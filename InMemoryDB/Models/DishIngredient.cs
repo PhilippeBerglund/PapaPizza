@@ -11,10 +11,10 @@ namespace PapaPizza.Models
     public class DishIngredient
     {
         public int DishId { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public Dish Dish { get; set; }
         public int IngredientId { get; set; }
-        [JsonIgnore]
+       // [JsonIgnore]
         public Ingredient Ingredient { get; set; }
 
         public bool checkboxAnswer { get; set; }

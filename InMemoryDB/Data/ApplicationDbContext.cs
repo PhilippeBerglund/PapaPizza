@@ -17,11 +17,6 @@ namespace PapaPizza.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<Category>()
-            //     .HasMany(c => c.Dishes)
-            //     .WithOne(d => d.Category)
-            //     .HasForeignKey(x => x.FKCategoryId);
-
             builder.Entity<DishIngredient>()
                 .HasKey(di => new { di.DishId, di.IngredientId });
 
@@ -55,8 +50,8 @@ namespace PapaPizza.Data
 
             //builder.Entity<Cart>()
             //    .HasKey(c => new { c.CartId });
-            //<-
 
+            //->
 
 
             base.OnModelCreating(builder);
@@ -69,7 +64,7 @@ namespace PapaPizza.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Cart> Cart { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<CartItemIngredient> CartItemIngredients { get; set; }
 
