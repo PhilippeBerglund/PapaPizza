@@ -31,16 +31,24 @@ namespace PapaPizza.Controllers
         // GET: CartItems
         public async Task<IActionResult> Index()
         {
-            var id = HttpContext.Session.GetInt32("CartSession");
-            if (id != null) {
-                var cartItems = await _context.CartItems
-                .Include(c => c.Dish)
-                .ThenInclude(d => d.DishIngredients)
-                .SingleOrDefaultAsync(c => c.CartItemId == id);
-            }
+            //var id = HttpContext.Session.GetInt32("CartSession");
+            //if (id != null)
+            //{
+            //    var cartItems = await _context.CartItems
+            //    .Include(c => c.Dish)
+            //    .ThenInclude(d => d.DishIngredients)
+            //    .SingleOrDefaultAsync(c => c.CartItemId == id);
+            //}
             //var korgEnhet = cartItems;
 
-            return View(await _context.CartItems.ToListAsync());
+            var catList = _context.Categories.ToListAsync();
+            var dish = await _context.CartItems
+                .Include(c => c.Dish)
+                .ThenInclude(d=> d.DishIngredients)
+                .ThenInclude(di => di.Ingredient)
+                .ToListAsync();
+
+            return View("Index", dish);
         }
 
 
@@ -58,29 +66,29 @@ namespace PapaPizza.Controllers
             var dish = await _context.Dishes
            .Include(d => d.DishIngredients)
            .ThenInclude(di => di.Ingredient)
-           .SingleOrDefaultAsync(m => m.DishId == id);
+           .FirstOrDefaultAsync(m => m.DishId == id);
 
             var cartID = HttpContext.Session.GetInt32("CartSession");
 
             Cart cart;
 
-            if (cartID == null)
+            if (HttpContext.Session.GetInt32("CartSession") == null)
             {
                 cart = new Cart
                 {
                     CartItems = new List<CartItem>()
                 };
+
                 _context.Cart.Add(cart);
+                await _context.SaveChangesAsync();
+                HttpContext.Session.SetInt32("CartSession", cart.CartId);
+                cartID = cart.CartId;
             }
-            else
-            {
-                cart = _context.Cart.Include(c => c.CartItems)
+
+            cart = _context.Cart.Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Dish)
+                .ThenInclude(d => d.DishIngredients)
                     .SingleOrDefault(c => c.CartId == cartID);
-
-                //var temp = HttpContext.Session.GetString("CartSession");
-
-                //cart = JsonConvert.DeserializeObject<List<Dish>>(temp);
-            }
 
             CartItem cartItem = new CartItem
             {
@@ -99,12 +107,16 @@ namespace PapaPizza.Controllers
                 };
                 cartItem.CartItemIngredients.Add(cartItemIngredient);
             }
-
-
             cart.CartItems.Add(cartItem);
+
             _context.SaveChanges();
 
-            HttpContext.Session.SetInt32("CartSession", cart.CartId);
+            // mir tror 
+            //var ingredients = _context.CartItemIngredients.Include(c => c.Ingredient)
+            //    .ThenInclude(ci => ci.DishIngredients)
+            //    .FirstOrDefault(d => d.IngredientId == id && d.Enabled);
+
+            return RedirectToAction("Index", "Dishes", cart.CartItems);
 
 
 
@@ -119,7 +131,6 @@ namespace PapaPizza.Controllers
 
 
 
-            return RedirectToAction("Index", "Dishes");
 
             // GetCartId(HttpContext httpContext);
             //var cartItem = await _context.CartItems.SingleOrDefaultAsync(
