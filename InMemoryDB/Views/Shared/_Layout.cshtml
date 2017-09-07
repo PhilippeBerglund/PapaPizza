@@ -36,7 +36,7 @@
                     <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Home</a></li>
                     @*<li><a asp-area="" asp-controller="Cart" asp-action="Index">Cart</a></li>*@
                     <li>
-                        <a asp-controller="Cart" asp-action="Index" title="@ViewBag.CartSummary">
+                        <a asp-controller="Cart" asp-action="CartIndex" title="@ViewBag.CartSummary">
                             <span class="glyphicon glyphicon-shopping-cart"></span>
                             @{
                                 var temp = Context.Session.GetString("CartSession");

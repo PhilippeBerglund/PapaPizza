@@ -29,7 +29,7 @@ namespace PapaPizza.Controllers
 
 
         // GET: CartItems
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> CartIndex()
         {
             //var id = HttpContext.Session.GetInt32("CartSession");
             //if (id != null)
@@ -48,7 +48,7 @@ namespace PapaPizza.Controllers
                 .ThenInclude(di => di.Ingredient)
                 .ToListAsync();
 
-            return View("Index", dish);
+            return View("CartIndex", dish);
         }
 
 
@@ -175,7 +175,7 @@ namespace PapaPizza.Controllers
             {
                 _context.Add(cart);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CartIndex));
             }
             return View(cart);
         }
@@ -226,7 +226,7 @@ namespace PapaPizza.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CartIndex));
             }
             return View(cart);
         }
@@ -257,7 +257,7 @@ namespace PapaPizza.Controllers
             var cart = await _context.Cart.SingleOrDefaultAsync(m => m.CartId == id);
             _context.Cart.Remove(cart);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(CartIndex));
         }
 
         private bool CartExists(int id)
