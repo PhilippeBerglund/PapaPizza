@@ -11,7 +11,7 @@ namespace PapaPizza.Data
 {
     public class DbInitializer
     {
-        public static void Initializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IngredientService ingredientService)
+        public static void Initializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IngredientService ingredientService, CartService cartService)
         {
             var aUser = new ApplicationUser
             {
@@ -48,7 +48,7 @@ namespace PapaPizza.Data
                 var coffeA = new Dish { Name = "Espresso", Category = coffee, Price = 21 };
                 var coffeB = new Dish { Name = "Cappuccino", Category = coffee, Price = 37 };
 
-                var cheese = new Ingredient { Name = "Mozarella" , Price = 10 };
+                var cheese = new Ingredient { Name = "Mozarella", Price = 10 };
                 var tomato = new Ingredient { Name = "Tomato", Price = 10 };
                 var ham = new Ingredient { Name = "Parma-Ham", Price = 10 };
                 var mushroom = new Ingredient { Name = "Mushroom", Price = 10 };

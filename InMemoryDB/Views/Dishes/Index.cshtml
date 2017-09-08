@@ -54,13 +54,13 @@
                             @if (!User.IsInRole("Admin"))
                             {
                                 @*<a asp-action="AddToCart" asp-route-id="@item.DishId">
-                                    <i class="glyphicon glyphicon-shopping-cart"></i>
-                                </a>*@
-                                <p class="button">
-                                        <a asp-controller="Cart" asp-action="ItemToCart" asp-route-id="@item.DishId"> // submit->
-                                            <i class="glyphicon glyphicon-shopping-cart" style="color:indianred"></i>
-                                        </a>
-                                    </p>
+                                        <i class="glyphicon glyphicon-shopping-cart"></i>
+                                    </a>*@
+                                
+                                ///Todo Change a to sumbit
+                                <a asp-controller="Cart" asp-action="ItemToCart" asp-route-id="@item.DishId">
+                                    <i class="glyphicon glyphicon-shopping-cart" style="color:indianred"></i>
+                                </a>
 
                             }
                         </td>

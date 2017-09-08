@@ -19,17 +19,18 @@ namespace PapaPizza.Controllers
         private readonly ApplicationDbContext _context;
         private readonly CartService _cartService;
         //private readonly HttpContext httpContext;
+        int cartID { get; set; }
 
-        public CartController(ApplicationDbContext context)// CartService cartService
+        public CartController(ApplicationDbContext context,  CartService cartService)
         {
-            //_cartService = cartService;
+            _cartService = cartService;
             _context = context;
         }
 
 
 
         // GET: CartItems
-        public async Task<IActionResult> CartIndex()
+        public async Task<IActionResult> CartIndex(int ? id )
         {
             //var id = HttpContext.Session.GetInt32("CartSession");
             //if (id != null)
@@ -47,10 +48,14 @@ namespace PapaPizza.Controllers
                 .ThenInclude(d=> d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
                 .ToListAsync();
+            var testo = dish.Select(x => x.CartId );
+            foreach (var item in testo)
+            {
+                var test = GetCount(Convert.ToInt32(item));
 
+            }
             return View("CartIndex", dish);
         }
-
 
 
 
@@ -68,6 +73,7 @@ namespace PapaPizza.Controllers
            .ThenInclude(di => di.Ingredient)
            .FirstOrDefaultAsync(m => m.DishId == id);
 
+            //var cartID = _cartService.GetCartId(httpContext); //----------------------->
             var cartID = HttpContext.Session.GetInt32("CartSession");
 
             Cart cart;
@@ -117,45 +123,6 @@ namespace PapaPizza.Controllers
             //    .FirstOrDefault(d => d.IngredientId == id && d.Enabled);
 
             return RedirectToAction("Index", "Dishes", cart.CartItems);
-
-
-
-
-            // cartItems.Add(new Dish{ });
-
-            // todo: fix 
-            //ViewBag.CartSummary = string.Join("\n", shoppingCart.Select(c => c.Name).Distinct());
-
-            //var serializedValue = JsonConvert.SerializeObject(shoppingCart);
-            //HttpContext.Session.SetInt32("CartSession", cart.CartId);
-
-
-
-
-            // GetCartId(HttpContext httpContext);
-            //var cartItem = await _context.CartItems.SingleOrDefaultAsync(
-            //    c => c.CartId == _cartService.GetCartId(httpContext)); // _shoppingCartId
-
-
-            //
-
-
-
-            //var items = _context.Dishes;
-
-            //var cart = _context.Carts
-            //    .SingleOrDefaultAsync(m => m.CartId == id);
-
-
-
-            //    cartItem = AddToCart(cartItem, cartItem.);
-
-            //    if (cartItem == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    //return RedirectToAction("Index");
-            //    return View(cartItem);
         }
 
         // GET: Carts/Create
@@ -265,5 +232,31 @@ namespace PapaPizza.Controllers
             return _context.Cart.Any(e => e.CartId == id);
         }
 
+        //Todo FIX ->
+        public int GetCount(int ? id)
+        {
+            // Get the count of each item in the cart and sum them up
+            int? count = (from cartItems in _context.CartItems
+                          where cartItems.CartId == id
+                          select (int?)cartItems.Quantity).Sum();
+            // Return 0 if all entries are null
+            return count ?? 0;
+        }
+
+       //Todo FIX -> [HttpPost]
+        public async Task<IActionResult> EmptyCart(int ? id )
+        {
+            _cartService.EmptyCart(id);
+           // return View("CartIndex");
+            return RedirectToAction(nameof(CartIndex));
+        }
+
+        //Todo FIX -> [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int? id)
+        {
+            _cartService.RemoveCartItem(id);
+            // return View("CartIndex");
+            return RedirectToAction(nameof(CartIndex));
+        }
     }
 }

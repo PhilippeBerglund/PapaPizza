@@ -29,7 +29,7 @@ namespace PapaPizza
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -39,7 +39,7 @@ namespace PapaPizza
             //--
             services.Configure<IISOptions>(options =>
             {
-                        
+
             });
             //--
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -52,6 +52,8 @@ namespace PapaPizza
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();  // behövs?? 
             services.AddTransient<IngredientService>();
+            services.AddTransient<CartService>();
+
             //->
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services.AddScoped(sp => CartController.GetCart(sp));
@@ -65,7 +67,14 @@ namespace PapaPizza
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager, IngredientService ingredientService)
+        public void Configure(IApplicationBuilder app
+                             , IHostingEnvironment env
+                             , UserManager<ApplicationUser> userManager
+                             , ApplicationDbContext context
+                             , RoleManager<IdentityRole> roleManager
+                             , IngredientService ingredientService
+                             , CartService cartService
+                            )
         {
             if (env.IsDevelopment())
             {
@@ -92,7 +101,7 @@ namespace PapaPizza
                     template: "{controller=Dishes}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initializer(context, userManager, roleManager, ingredientService);
+            DbInitializer.Initializer(context, userManager, roleManager, ingredientService, cartService);
         }
     }
 }

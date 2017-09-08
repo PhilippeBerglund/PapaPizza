@@ -5,46 +5,90 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using PapaPizza.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+
+
 namespace PapaPizza.Services
 {
     public class CartService
     {
         private readonly ApplicationDbContext _context;
         private readonly string _shoppingCartId;
+        string cartID;
 
 
-        public CartService(ApplicationDbContext context, string id )
+        public CartService(ApplicationDbContext context)
         {
             _context = context;
-            _shoppingCartId = id;
+            //_shoppingCartId = id;
         }
 
-        public CartService GetCart(ApplicationDbContext db, HttpContext httpContext)
-                => GetCart(db, GetCartId(httpContext));
+        //    public CartService GetCart(ApplicationDbContext db, HttpContext httpContext)
+        //            => GetCart(db, GetCartId(httpContext));
 
-        public static CartService GetCart(ApplicationDbContext db, string cartId)
-           => new CartService(db, cartId);
+        //    public static CartService GetCart(ApplicationDbContext db, string cartId)
+        //       => new CartService(db, cartId);
 
 
 
-        // We're using HttpContextBase to allow access to sessions.
-        public string GetCartId(HttpContext httpContext)
+        //    // We're using HttpContextBase to allow access to sessions.
+        //    public string GetCartId(HttpContext httpContext)
+        //    {
+        //        var cartId = httpContext.Session.GetString("Session");
+
+        //        if (cartId == null)
+        //        {
+        //            //A GUID to hold the cartId. 
+        //            cartId = Guid.NewGuid().ToString();
+
+        //            // Send cart Id as a cookie to the client.
+        //            httpContext.Session.SetString("Session", cartId);
+        //        }
+
+        //        return cartId;
+        //    }
+
+
+
+        //Todo FIX->
+        public void EmptyCart(int ? id )
         {
-            var cartId = httpContext.Session.GetString("Session");
-
-            if (cartId == null)
+            if (id == null)
             {
-                //A GUID to hold the cartId. 
-                cartId = Guid.NewGuid().ToString();
-
-                // Send cart Id as a cookie to the client.
-                httpContext.Session.SetString("Session", cartId);
+                return;
             }
+            var cartItems = _context.CartItems.Where(
+                cart => cart.CartId == Convert.ToInt32(id));
 
-            return cartId;
+            foreach (var item in cartItems)
+            {
+                _context.CartItems.Remove(item);
+            }
+            // Save changes
+            _context.SaveChanges();
         }
 
+        public int GetCartId()
+        {
+            int id= 0;
+            foreach (var item in _context.CartItems)
+            {
+                id = item.CartId;
+            }
+            return id;
+        }
 
+        public void RemoveCartItem(int ? id)
+        {
+            var item = _context.CartItems.SingleOrDefault(m => m.CartItemId == id);
+
+            _context.CartItems.Remove(item);
+            _context.SaveChangesAsync();
+        }
 
     }
 }
