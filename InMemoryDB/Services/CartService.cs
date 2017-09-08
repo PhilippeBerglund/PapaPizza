@@ -5,12 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PapaPizza.Models;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-
 
 namespace PapaPizza.Services
 {
@@ -82,6 +76,7 @@ namespace PapaPizza.Services
             return id;
         }
 
+        //Todo FIX->
         public void RemoveCartItem(int ? id)
         {
             var item = _context.CartItems.SingleOrDefault(m => m.CartItemId == id);
