@@ -11,7 +11,7 @@ namespace PapaPizza.Services
     public class CartService
     {
         private readonly ApplicationDbContext _context;
-        private readonly string _shoppingCartId;
+        //private readonly string _shoppingCartId;
         string cartID;
 
 
@@ -79,7 +79,7 @@ namespace PapaPizza.Services
         //Todo FIX->
         public void RemoveCartItem(int ? id)
         {
-            var item = _context.CartItems.SingleOrDefault(m => m.CartItemId == id);
+            var item = _context.CartItems.FirstOrDefault(m => m.CartItemId == id);
 
             _context.CartItems.Remove(item);
             _context.SaveChangesAsync();

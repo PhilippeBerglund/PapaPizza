@@ -91,7 +91,8 @@ namespace PapaPizza.Controllers
                 cartID = cart.CartId;
             }
 
-            cart = _context.Cart.Include(c => c.CartItems)
+            cart = _context.Cart
+                .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Dish)
                 .ThenInclude(d => d.DishIngredients)
                     .SingleOrDefault(c => c.CartId == cartID);
@@ -243,7 +244,7 @@ namespace PapaPizza.Controllers
             return count ?? 0;
         }
 
-       //Todo FIX -> [HttpPost]
+       //Todo FIX -> [HttpPost] 
         public async Task<IActionResult> EmptyCart(int ? id )
         {
             _cartService.EmptyCart(id);
@@ -251,12 +252,16 @@ namespace PapaPizza.Controllers
             return RedirectToAction(nameof(CartIndex));
         }
 
-        //Todo FIX -> [HttpPost]
+        //Todo FIX -> [HttpPost] // works only once, throws null exeption when deleting second time.. 
         public async Task<IActionResult> RemoveFromCart(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             _cartService.RemoveCartItem(id);
-            // return View("CartIndex");
-            return RedirectToAction(nameof(CartIndex));
+             return View("CartIndex");
+            //return RedirectToAction(nameof(CartIndex));
         }
     }
 }
