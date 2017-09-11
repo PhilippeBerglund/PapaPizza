@@ -48,13 +48,25 @@ namespace PapaPizza.Controllers
                 .ThenInclude(d=> d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
                 .ToListAsync();
+            // test->
             var testo = dish.Select(x => x.CartId );
             foreach (var item in testo)
             {
                 var test = GetCount(Convert.ToInt32(item));
 
             }
-            return View("CartIndex", dish);
+            // end test<-
+
+            var cart = _context.Cart
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.CartItemIngredients)
+                .ThenInclude(cii => cii.CartItem)
+                .ThenInclude(ci => ci.Dish)
+                .ThenInclude(d => d.DishIngredients)
+                .ThenInclude(di => di.Ingredient)
+                .ToList();
+
+            return View("CartIndex", cart);
         }
 
 
@@ -123,7 +135,9 @@ namespace PapaPizza.Controllers
             //    .ThenInclude(ci => ci.DishIngredients)
             //    .FirstOrDefault(d => d.IngredientId == id && d.Enabled);
 
-            return RedirectToAction("Index", "Dishes", cart.CartItems);
+            //return RedirectToAction("Index", "Dishes", cart.CartItems);
+            return RedirectToAction("Index", "Dishes", cart); // bör ev skicka cart.CartItems// 
+
         }
 
         // GET: Carts/Create

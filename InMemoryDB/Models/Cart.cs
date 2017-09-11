@@ -20,6 +20,8 @@ namespace PapaPizza.Models
         public int ApplicationUserId { get; set; }  
         public List<CartItem> CartItems { get; set; }
 
+        public Dish Dish { get; set; }
+
     }
 
 }

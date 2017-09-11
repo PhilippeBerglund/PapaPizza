@@ -20,11 +20,37 @@ namespace PapaPizza.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> OrderIndex(int ? id )
         {
-            var applicationDbContext = _context.Order.Include(o => o.MyCart);
-            return View(await applicationDbContext.ToListAsync());
-        }
+            //var applicationDbContext = _context.Order.Include(o => o.MyCart);
+
+            var catList = _context.Categories.ToListAsync();
+
+            //var cart = await _context.CartItems
+            //    .Include(c => c.Dish)
+            //    .ThenInclude(d => d.DishIngredients)
+            //    .ThenInclude(di => di.Ingredient)
+            //    .ToListAsync();
+
+            //var cart = await _context.Order
+            //   .Include(o => o.MyCart)
+            //   .ThenInclude(c => c.CartItems)
+            //   .ThenInclude(ci => ci.Dish)
+            //   .ThenInclude(d => d.DishIngredients)
+            //   .ToListAsync();
+
+            var cart = _context.Cart
+               .Include(c => c.CartItems)
+               .ThenInclude(ci => ci.CartItemIngredients)
+               .ThenInclude(cii => cii.CartItem)
+               .ThenInclude(ci => ci.Dish)
+               .ThenInclude(d => d.DishIngredients)
+               .ThenInclude(di => di.Ingredient)
+               .ToList();
+
+            return View("OrderIndex", cart);
+            //return View(await applicationDbContext.ToListAsync());
+        }   
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -63,7 +89,7 @@ namespace PapaPizza.Controllers
             {
                 _context.Add(order);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(OrderIndex));
             }
             ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
             return View(order);
@@ -116,7 +142,7 @@ namespace PapaPizza.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(OrderIndex));
             }
             ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
             return View(order);
@@ -149,7 +175,7 @@ namespace PapaPizza.Controllers
             var order = await _context.Order.SingleOrDefaultAsync(m => m.id == id);
             _context.Order.Remove(order);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(OrderIndex));
         }
 
         private bool OrderExists(int id)

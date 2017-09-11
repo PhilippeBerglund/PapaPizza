@@ -1,0 +1,70 @@
+﻿@model IEnumerable<PapaPizza.Models.Cart>
+@{
+    ViewData["Title"] = "Index";
+}
+<h2>Order Index</h2>
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CartItems)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CartItems.Dish.Name)*@
+                <span>Price</span>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.ApplicationUserId)
+                </td>*@
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.CartItems)
+                </td>*@
+
+            @foreach (var dish in item.CartItems)
+            {
+                <tr>
+                    <td>
+                        <b>@dish.Dish.Name</b>
+                        <br/>
+                        @if (dish.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
+                        {
+                            @foreach (var it in dish.Dish.DishIngredients)
+                            {
+                                <span>@it.Ingredient.Name</span>
+                            }
+                            @*@item.CartItemIngredients*@
+                        }
+                        @*@Html.DisplayNameFor(model => i.Dish.Name)*@
+
+                    </td>
+                    <td>
+                        @dish.Dish.Price
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+@*<a asp-action="Buy" asp-route-id="">Buy</a>*@
+
+
+@*<td>
+        @item.Dish.Price
+    </td>*@
+@* <td>
+        <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+    </td>*@

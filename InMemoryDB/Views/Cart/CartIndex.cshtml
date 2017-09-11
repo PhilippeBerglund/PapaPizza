@@ -1,48 +1,82 @@
-﻿@model IEnumerable<PapaPizza.Models.CartItem>
+﻿@model IEnumerable<PapaPizza.Models.Cart>
 @inject PapaPizza.Services.CartService cartService
 @{
     ViewData["Title"] = "Index";
 }
-<h2>Index!</h2>
+<h2>Cart Index!</h2>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Dish)
+                @*<sapn>Dish</sapn>*@
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Dish.Category)
+            </th>
+            <th>
+                @*<span>Price</span>*@
                 @Html.DisplayNameFor(model => model.Dish.Price)
             </th>
-            <th>HEJ</th>
         </tr>
     </thead>
     <tbody>
         @if (Model != null)
         {
-            @foreach (var item in Model)
+            @foreach (var cart in Model)
             {
-                <tr>
-                    <td>
-                        <b>@item.Dish.Name</b>
-                        <br />
-                        @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
-                        {
-                            @foreach (var i in item.Dish.DishIngredients)
+
+                @foreach (var item in cart.CartItems)
+                {
+                    <tr>
+                        <td>
+                            <b>@item.Dish.Name</b>
+                            <br/>
+
+                            @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
                             {
-                                <span>@i.Ingredient.Name</span>
+                                    @foreach (var i in item.Dish.DishIngredients)
+                                    {
+                                        <span>@i.Ingredient.Name</span>
+                                    }
+                                    @*@item.CartItemIngredients*@
                             }
-                            @item.CartItemIngredients
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Price)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.CartId">Details</a> |
-                        <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartId">Remove</a>
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            @item.Dish.Category.Name
+                        </td>
+                        <td>
+                            @item.Dish.Price
+
+                        </td>
+
+
+
+
+                        @*<td>
+                                <b>@item.Dish.Name</b>
+                                <br />
+                                @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
+                                {
+                                    @foreach (var i in item.Dish.DishIngredients)
+                                    {
+                                        <span>@i.Ingredient.Name</span>
+                                    }
+                                    @item.CartItemIngredients
+                                }
+                            </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.Dish.Price)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.CartId">Details</a> |
+                                <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartId">Remove</a>
+                            </td>*@
+
+
+                    </tr>
+                }
             }
         }
     </tbody>
@@ -55,11 +89,12 @@
     @if (id != 0)
     {
         <a asp-controller="Cart" asp-action="EmptyCart" asp-route-id="@id">Empty Cart</a>
-        <br/>
-        <a asp-controller="Orders" asp-action="Index" asp-route-id="@id">Checkout</a>
+        <br />
+                            <a asp-controller="Orders" asp-action="OrderIndex" asp-route-id="@id">Checkout</a>
 
     }
     else
     {<h3>Cart is Empty</h3>}
 
 }
+
