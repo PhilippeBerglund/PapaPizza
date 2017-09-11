@@ -21,16 +21,14 @@ namespace PapaPizza.Controllers
         //private readonly HttpContext httpContext;
         int cartID { get; set; }
 
-        public CartController(ApplicationDbContext context,  CartService cartService)
+        public CartController(ApplicationDbContext context, CartService cartService)
         {
             _cartService = cartService;
             _context = context;
         }
 
-
-
         // GET: CartItems
-        public async Task<IActionResult> CartIndex(int ? id )
+        public async Task<IActionResult> CartIndex(int? id)
         {
             //var id = HttpContext.Session.GetInt32("CartSession");
             //if (id != null)
@@ -45,11 +43,11 @@ namespace PapaPizza.Controllers
             var catList = _context.Categories.ToListAsync();
             var dish = await _context.CartItems
                 .Include(c => c.Dish)
-                .ThenInclude(d=> d.DishIngredients)
+                .ThenInclude(d => d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
                 .ToListAsync();
             // test->
-            var testo = dish.Select(x => x.CartId );
+            var testo = dish.Select(x => x.CartId);
             foreach (var item in testo)
             {
                 var test = GetCount(Convert.ToInt32(item));
@@ -65,6 +63,9 @@ namespace PapaPizza.Controllers
                 .ThenInclude(d => d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
                 .ToList();
+
+            // test 
+            //_cartService.GetTotal(HttpContext );
 
             return View("CartIndex", cart);
         }
@@ -248,7 +249,7 @@ namespace PapaPizza.Controllers
         }
 
         //Todo FIX ->
-        public int GetCount(int ? id)
+        public int GetCount(int? id)
         {
             // Get the count of each item in the cart and sum them up
             int? count = (from cartItems in _context.CartItems
@@ -258,11 +259,11 @@ namespace PapaPizza.Controllers
             return count ?? 0;
         }
 
-       //Todo FIX -> [HttpPost] 
-        public async Task<IActionResult> EmptyCart(int ? id )
+        //Todo FIX -> [HttpPost] 
+        public async Task<IActionResult> EmptyCart(int? id)
         {
             _cartService.EmptyCart(id);
-           // return View("CartIndex");
+            // return View("CartIndex");
             return RedirectToAction(nameof(CartIndex));
         }
 
@@ -274,7 +275,7 @@ namespace PapaPizza.Controllers
                 return NotFound();
             }
             _cartService.RemoveCartItem(id);
-             return View("CartIndex");
+            return View("CartIndex");
             //return RedirectToAction(nameof(CartIndex));
         }
     }

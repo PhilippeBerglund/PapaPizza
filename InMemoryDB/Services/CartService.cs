@@ -12,14 +12,18 @@ namespace PapaPizza.Services
     {
         private readonly ApplicationDbContext _context;
         //private readonly string _shoppingCartId;
-        string cartID;
+        public HttpContext httpContext;
+        //string cartID;
 
+        //public const string CartSessionKey = "CartSession";
 
-        public CartService(ApplicationDbContext context)
+        public CartService(ApplicationDbContext context) //, HttpContext HttpContext
         {
             _context = context;
-            //_shoppingCartId = id;
+            //     httpContext = HttpContext;
         }
+
+
 
         //    public CartService GetCart(ApplicationDbContext db, HttpContext httpContext)
         //            => GetCart(db, GetCartId(httpContext));
@@ -49,7 +53,7 @@ namespace PapaPizza.Services
 
 
         //Todo FIX->
-        public void EmptyCart(int ? id )
+        public void EmptyCart(int? id)
         {
             if (id == null)
             {
@@ -66,23 +70,42 @@ namespace PapaPizza.Services
             _context.SaveChanges();
         }
 
-        public int GetCartId()
+        public int ?  GetItemCount() // HttpContext httpContext
         {
-            int id= 0;
+            // int? id = httpContext.Session.GetInt32("CartSession");
+
+            int count = 0;
             foreach (var item in _context.CartItems)
             {
-                id = item.CartId;
+                count = item.CartId;
             }
-            return id;
+            return  count  ;
         }
 
         //Todo FIX->
-        public void RemoveCartItem(int ? id)
+        public void RemoveCartItem(int? id)
         {
             var item = _context.CartItems.FirstOrDefault(m => m.CartItemId == id);
 
             _context.CartItems.Remove(item);
             _context.SaveChangesAsync();
+        }
+
+        public decimal? GetTotal(HttpContext httpContext)
+        {
+            var session = httpContext.Session.GetInt32("CartSession");
+            decimal? total = 0;
+            //if (httpContext == null)
+            //{
+
+            decimal? cartID = httpContext.Session.GetInt32("CartSession");
+
+            total = (from cartItems in _context.CartItems
+                     where cartItems.CartId == cartID
+                     select (int?)cartItems.Quantity *
+                     cartItems.Dish.Price).Sum();
+
+            return total;
         }
 
     }

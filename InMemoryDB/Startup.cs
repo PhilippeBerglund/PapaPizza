@@ -55,7 +55,7 @@ namespace PapaPizza
             services.AddTransient<CartService>();
 
             //->
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services.AddScoped(sp => CartController.GetCart(sp));
             //<-
             services.AddMvc();

@@ -20,7 +20,7 @@ namespace PapaPizza.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> OrderIndex(int ? id )
+        public async Task<IActionResult> OrderIndex(int? id)
         {
             //var applicationDbContext = _context.Order.Include(o => o.MyCart);
 
@@ -41,16 +41,17 @@ namespace PapaPizza.Controllers
 
             var cart = _context.Cart
                .Include(c => c.CartItems)
-               .ThenInclude(ci => ci.CartItemIngredients)
-               .ThenInclude(cii => cii.CartItem)
                .ThenInclude(ci => ci.Dish)
-               .ThenInclude(d => d.DishIngredients)
+               .ThenInclude(cii => cii.CartItem)
+               .ThenInclude(ci => ci.CartItemIngredients)
+               //.ThenInclude(d => d.DishIngredients)
                .ThenInclude(di => di.Ingredient)
                .ToList();
 
+            // Todo fix bugg-> coffe or gelato not included in dish
             return View("OrderIndex", cart);
             //return View(await applicationDbContext.ToListAsync());
-        }   
+        }
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
