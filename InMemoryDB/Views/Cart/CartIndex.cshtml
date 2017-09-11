@@ -40,7 +40,7 @@
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.CartId">Details</a> |
-                        <a asp-action="RemoveFromCart" asp-route-id="@item.CartId">Remove</a>
+                        <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartId">Remove</a>
                     </td>
                 </tr>
             }
@@ -55,6 +55,9 @@
     @if (id != 0)
     {
         <a asp-controller="Cart" asp-action="EmptyCart" asp-route-id="@id">Empty Cart</a>
+        <br/>
+        <a asp-controller="Orders" asp-action="Index" asp-route-id="@id">Checkout</a>
+
     }
     else
     {<h3>Cart is Empty</h3>}
