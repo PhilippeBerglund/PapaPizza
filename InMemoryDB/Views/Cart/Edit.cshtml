@@ -1,23 +1,51 @@
-﻿@model PapaPizza.Models.Dish
+﻿@model PapaPizza.Models.CartItem
+@inject PapaPizza.Services.IngredientService ingredientService
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit Dish</h2>
 
-<h4>Cart</h4>
+    <h4>@Model.Dish.Name</h4>
+    <br />
+    @foreach (var item in ingredientService.GetIngredients())
+    {
+
+        if (Model.CartItemIngredients.Any(x => x.IngredientId == item.IngredientId && x.Enabled))
+        {
+
+            <input checked type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                                <label asp-for="@item.Name">@item.Name</label>
+                                <br />
+        }
+        else
+        {
+            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                                <label asp-for="@item.Name">@item.Name</label>
+                                <br />
+        }
+
+    @*@if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
+    {
+        @foreach (var i in item.Dish.DishIngredients)
+        {
+            <span>@i.IngredientId</span>
+        }
+    }*@
+}
+@*<h4>@Html.DisplayNameFor(m => m.CartItems)</h4>*@
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="DishId" />
+            <input type="hidden" asp-for="CartId" />
             @*<div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
-                <input asp-for="ApplicationUserId" class="form-control" />
-                <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
-            </div>*@
+                    <label asp-for="ApplicationUserId" class="control-label"></label>
+                    <input asp-for="ApplicationUserId" class="form-control" />
+                    <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
@@ -26,6 +54,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="OrderIndex">Back to List</a>
 </div>
 

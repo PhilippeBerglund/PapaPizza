@@ -42,13 +42,12 @@ namespace PapaPizza.Controllers
             var cart = _context.Cart
                .Include(c => c.CartItems)
                .ThenInclude(ci => ci.Dish)
-               .ThenInclude(cii => cii.CartItem)
-               .ThenInclude(ci => ci.CartItemIngredients)
-               //.ThenInclude(d => d.DishIngredients)
+              // .ThenInclude(cii => cii.CartItem)// --------------------------------------------------->
+          //     .ThenInclude(ci => ci.CartItemIngredients)
+               .ThenInclude(d => d.DishIngredients)
                .ThenInclude(di => di.Ingredient)
                .ToList();
 
-            // Todo fix bugg-> coffe or gelato not included in dish
             return View("OrderIndex", cart);
             //return View(await applicationDbContext.ToListAsync());
         }

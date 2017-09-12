@@ -14,7 +14,7 @@ namespace PapaPizza.Models
         public int CategoryId { get; set; }
 
         //// phbe04
-        public CartItem CartItem { get; set; }
+      //  public CartItem CartItem { get; set; }
         //public int CartItemId { get; set; }
 
         public List<DishIngredient> DishIngredients { get; set; }

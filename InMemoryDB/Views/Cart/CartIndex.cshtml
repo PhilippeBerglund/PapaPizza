@@ -10,14 +10,16 @@
     <thead>
         <tr>
             <th>
-                @*@Html.DisplayNameFor(model => model.Dish)*@
-                @*<sapn>Dish</sapn>*@
+                @*@Html.DisplayNameFor(model => model.Cart)*@
+                <sapn>Dish</sapn>
             </th>
             <th>
                 @*@Html.DisplayNameFor(model => model.Dish.Category)*@
+                <sapn>Category</sapn>
+
             </th>
             <th>
-                @*<span>Price</span>*@
+                <span>Price</span>
                 @*@Html.DisplayNameFor(model => model.Dish.Price)*@
             </th>
         </tr>
@@ -44,12 +46,17 @@
                                 @*@item.CartItemIngredients*@
                             }
                         </td>
+
                         <td>
                             @item.Dish.Category.Name
                         </td>
                         <td>
                             @item.Dish.Price
-
+                        </td>
+                        <td>
+                            <a>
+                                <a asp-action="Edit" asp-route-id="@item.CartItemId">Edit Ingredients</a>
+                            </a>
                         </td>
 
 
@@ -71,8 +78,8 @@
                                 @Html.DisplayFor(modelItem => item.Dish.Price)
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a> 
-                                <a asp-action="Details" asp-route-id="@item.CartId">Details</a> 
+                                <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.CartId">Details</a>
                                 <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartId">Remove</a>
                             </td>*@
                     </tr>
@@ -94,12 +101,12 @@
 <br />
 @*@if (Model != null)*@
 
-@{var count = cartService.GetItemCount(); // Context
-    @if (count != 0)
+@{var id = cartService.CheckCart(); // Context
+    @if (id != 0)
     {
-        <a asp-controller="Cart" asp-action="EmptyCart" asp-route-id="@count">Empty Cart</a>
+        <a asp-controller="Cart" asp-action="EmptyCart" asp-route-id="@id">Empty Cart</a>
         <br />
-        <a asp-controller="Orders" asp-action="OrderIndex" asp-route-id="@count">Checkout</a>
+        <a asp-controller="Orders" asp-action="OrderIndex" asp-route-id="@id">Checkout</a>
 
     }
     else

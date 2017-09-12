@@ -70,16 +70,16 @@ namespace PapaPizza.Services
             _context.SaveChanges();
         }
 
-        public int ?  GetItemCount() // HttpContext httpContext
+        public int? CheckCart() // HttpContext httpContext
         {
             // int? id = httpContext.Session.GetInt32("CartSession");
 
-            int count = 0;
+            int id = 0;
             foreach (var item in _context.CartItems)
             {
-                count = item.CartId;
+                id = item.CartId;
             }
-            return  count  ;
+            return id;
         }
 
         //Todo FIX->

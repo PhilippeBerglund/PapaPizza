@@ -30,7 +30,7 @@ namespace PapaPizza.Controllers
         // GET: CartItems
         public async Task<IActionResult> CartIndex(int? id)
         {
-            //var id = HttpContext.Session.GetInt32("CartSession");
+            id = HttpContext.Session.GetInt32("CartSession");
             //if (id != null)
             //{
             //    var cartItems = await _context.CartItems
@@ -112,8 +112,10 @@ namespace PapaPizza.Controllers
 
             CartItem cartItem = new CartItem
             {
+                CartId = cart.CartId, // test
                 Dish = dish,
-                Cart = cart,
+                DishId = dish.DishId, // test
+                Cart = cart,  // behövs??
                 CartItemIngredients = new List<CartItemIngredient>(),
                 Quantity = 1
             };
@@ -122,8 +124,9 @@ namespace PapaPizza.Controllers
             {
                 var cartItemIngredient = new CartItemIngredient
                 {
+                    Enabled = item.checkboxAnswer,
                     Ingredient = item.Ingredient,
-                    CartItem = cartItem
+                    CartItem = cartItem   // behövs ??
                 };
                 cartItem.CartItemIngredients.Add(cartItemIngredient);
             }
@@ -131,13 +134,14 @@ namespace PapaPizza.Controllers
 
             _context.SaveChanges();
 
+            return RedirectToAction("Index", "Dishes"); // bör ev skicka med cart.CartItems
+
+
             // mir tror 
             //var ingredients = _context.CartItemIngredients.Include(c => c.Ingredient)
             //    .ThenInclude(ci => ci.DishIngredients)
             //    .FirstOrDefault(d => d.IngredientId == id && d.Enabled);
 
-            //return RedirectToAction("Index", "Dishes", cart.CartItems);
-            return RedirectToAction("Index", "Dishes", cart); // bör ev skicka cart.CartItems// 
 
         }
 
@@ -171,12 +175,26 @@ namespace PapaPizza.Controllers
                 return NotFound();
             }
 
-            var cart = await _context.Cart.SingleOrDefaultAsync(m => m.CartId == id);
-            if (cart == null)
+            var cartItem = await _context.CartItems
+                .Include(ci => ci.Dish)
+                .Include(ci => ci.CartItemIngredients)
+                .ThenInclude(cii => cii.Ingredient)
+                .SingleOrDefaultAsync(m => m.CartItemId == id);
+
+            if (cartItem == null)
             {
                 return NotFound();
             }
-            return View(cart);
+
+            //foreach (var item in cartItem.CartItemIngredients)
+            //{
+            //    item.Dish = _context.Dishes
+            //        .Include(d => d.DishIngredients)
+            //        .ThenInclude(di => di.Ingredient)
+            //        .FirstOrDefault(x => x.DishId == item.DishId);
+
+            //}
+            return View(cartItem);
         }
 
         // POST: Carts/Edit/5
