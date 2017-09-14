@@ -38,7 +38,7 @@
                     @if (!User.IsInRole("Admin"))
                     {
                         <li>
-                            <a asp-controller="Cart" asp-action="CartIndex" title="@ViewBag.CartSummary">
+                            <a asp-controller="Cart" asp-action="CartIndex" title="@ViewBag.CartSummary">Your Cart
                                 <span class="glyphicon glyphicon-shopping-cart"></span>
                                 @*@{
                                     var temp = Context.Session.GetInt32("CartSession").ToString();

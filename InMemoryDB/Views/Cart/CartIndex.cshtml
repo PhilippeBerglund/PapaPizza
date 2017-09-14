@@ -37,14 +37,16 @@
                             <b>@item.Dish.Name</b>
                             <br />
 
-                            @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
+                            @if (item.CartItemIngredients.Any(x => x.Enabled  )) 
                             {
-                                @foreach (var i in item.Dish.DishIngredients)
+                                // extra Ingredient null  Printing all instesad of enabled true 
+                                @foreach (var i in item.CartItemIngredients)
                                 {
-                                    <span>@i.Ingredient.Name</span>
+                                   <span>@i.Ingredient.Name</span>
                                 }
                                 @*@item.CartItemIngredients*@
                             }
+                            else { <span>sorry boss</span> }
                         </td>
 
                         <td>
@@ -54,9 +56,7 @@
                             @item.Dish.Price
                         </td>
                         <td>
-                            <a>
-                                <a asp-action="Edit" asp-route-id="@item.CartItemId">Edit Ingredients</a>
-                            </a>
+                                <a asp-action="EditCartItem" asp-route-id="@item.CartItemId">Edit Ingredients</a>
                         </td>
 
 
@@ -84,16 +84,17 @@
                             </td>*@
                     </tr>
                 }
-                <tr>
-                    <td>
-                        <b>Total:</b>
-                    </td>
-                    <td></td>
-                    <td>
-                        <span>@cartService.GetTotal(Context)</span>
-                    </td>
-                </tr>
+                
             }
+            <tr>
+                <td>
+                    <b>Total:</b>
+                </td>
+                <td></td>
+                <td>
+                    <span>@cartService.GetTotal(Context)</span>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

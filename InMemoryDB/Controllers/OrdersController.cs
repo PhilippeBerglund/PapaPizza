@@ -48,7 +48,7 @@ namespace PapaPizza.Controllers
                .ThenInclude(di => di.Ingredient)
                .ToList();
 
-            return View("OrderIndex", cart);
+            return View(cart);
             //return View(await applicationDbContext.ToListAsync());
         }
 

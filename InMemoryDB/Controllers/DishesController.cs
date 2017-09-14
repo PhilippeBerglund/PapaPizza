@@ -156,10 +156,11 @@ namespace PapaPizza.Controllers
                             Dish = dish,
                             checkboxAnswer = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}")
                         };
-
-                        _context.DishIngredients.Add(dishIngredient);
-                        await _context.SaveChangesAsync();
+                        dishToEdit.DishIngredients.Add(dishIngredient);
+                   //     _context.DishIngredients.Add(dishIngredient);
+                       // await _context.SaveChangesAsync();
                     }
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
