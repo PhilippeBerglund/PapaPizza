@@ -38,7 +38,7 @@ namespace PapaPizza.Controllers
             {
                 return NotFound();
             }
-            
+
             // test->
             //var testo = dish.Select(x => x.CartId);
             //foreach (var item in testo)
@@ -47,9 +47,11 @@ namespace PapaPizza.Controllers
             //}
             // end test<-
 
+            var catList = _context.Categories.ToListAsync();
             var cart = _context.Cart
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.CartItemIngredients)
+                .ThenInclude(cii => cii.Ingredient) // ------------------>
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Dish)
                 .ThenInclude(d => d.DishIngredients)
