@@ -30,9 +30,9 @@ namespace PapaPizza.Controllers
         }
 
         // GET: CartItems
-        public IActionResult CartIndex()
+        public IActionResult CartIndex(int ? id )
         {
-            var id = HttpContext.Session.GetInt32("CartSession");
+             id = HttpContext.Session.GetInt32("CartSession");
 
             if (id == null)
             {
@@ -158,6 +158,7 @@ namespace PapaPizza.Controllers
         // GET: Carts/Edit/5
         public async Task<IActionResult> EditCartItem(int? id)
         {
+          
             if (id == null)
             {
                 return NotFound();
