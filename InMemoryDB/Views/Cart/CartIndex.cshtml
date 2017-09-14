@@ -39,14 +39,14 @@
 
                             @if (item.CartItemIngredients.Any(x => x.Enabled  )) 
                             {
-                                // extra Ingredient null  Printing all instesad of enabled true 
+                                // extra Ingredient null  Printing non instead of enabled true 
                                 @foreach (var i in item.CartItemIngredients)
                                 {
                                    <span>@i.Ingredient.Name</span>
                                 }
                                 @*@item.CartItemIngredients*@
                             }
-                            else { <span>sorry boss</span> }
+                           @* else { <span>sorry boss</span> }*@
                         </td>
 
                         <td>

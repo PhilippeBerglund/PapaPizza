@@ -58,7 +58,7 @@ namespace PapaPizza.Controllers
             var cart = _context.Cart
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.CartItemIngredients)
-                .ThenInclude(cii => cii.CartItem)
+                .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Dish)
                 .ThenInclude(d => d.DishIngredients)
                 .ThenInclude(di => di.Ingredient);
@@ -245,7 +245,7 @@ namespace PapaPizza.Controllers
                         cartItem.CartItemIngredients.Add(cartItemIngrtedient);
 
                     }
-                    _context.Update(cartItem);
+                    _context.CartItems.Add(cartItem);
                     await _context.SaveChangesAsync();
 
                 }
