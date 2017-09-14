@@ -63,11 +63,8 @@ namespace PapaPizza.Services
 
         public decimal? GetTotal(HttpContext httpContext)
         {
-            var session = httpContext.Session.GetInt32("CartSession");
             decimal? total = 0;
-            //if (httpContext == null)
-            //{
-
+         
             decimal? cartID = httpContext.Session.GetInt32("CartSession");
 
             total = (from cartItems in _context.CartItems
@@ -78,19 +75,34 @@ namespace PapaPizza.Services
             return total;
         }
 
-        ///--------------------------------------------------------------------->
-        ///
-        //public Cart AddToCart(int? id)
+        //public decimal? GetDishTotal(HttpContext httpContext, int cartItemId )
         //{
-        //    //if (id == null)
-        //    //{
-        //    //    return Cart;
-        //    //}
+        //    var id = _context.CartItems.Where(c => c.CartItemId == cartItemId);
+        //    decimal total = 0;
 
-        //    var dish =  _context.Dishes
-        //   .Include(d => d.DishIngredients)
-        //   .ThenInclude(di => di.Ingredient)
-        //   .FirstOrDefaultAsync(m => m.DishId == id);
+        //    total = (from DishIngredients in _context.DishIngredients
+        //             where cartItemId = id
+        //             select (int? )DishIngredients.Price += CartItemIngredients.Price)
+        //    return total;
+        //}
+
+     
+
+        //public List<CartItem> AddToCart(int?  dishId, HttpContext httpContext)
+        //{
+
+
+        //    if (dishId == null)
+        //    {
+        //        //Gör något här!
+
+        //        //return NotFound();
+        //    }
+
+        //    var dish = _context.Dishes
+        //        .Include(d => d.DishIngredients)
+        //        .ThenInclude(di => di.Ingredient)
+        //        .FirstOrDefault(m => m.DishId == dishId);
 
         //    var cartID = httpContext.Session.GetInt32("CartSession");
 
@@ -104,115 +116,39 @@ namespace PapaPizza.Services
         //        };
 
         //        _context.Cart.Add(cart);
-        //        _context.SaveChangesAsync();
+        //        _context.SaveChanges();
         //        httpContext.Session.SetInt32("CartSession", cart.CartId);
         //        cartID = cart.CartId;
         //    }
 
-        //    cart = _context.Cart
-        //        .Include(c => c.CartItems)
+        //    cart = _context.Cart.Include(c => c.CartItems)
         //        .ThenInclude(ci => ci.Dish)
         //        .ThenInclude(d => d.DishIngredients)
-        //            .SingleOrDefault(c => c.CartId == cartID);
+        //        .SingleOrDefault(c => c.CartId == cartID);
 
         //    CartItem cartItem = new CartItem
         //    {
-        //        CartId = cart.CartId, // test
-        //        //Dish = dish,
-        //        //DishId = dish.DishId, // test
-        //        Cart = cart,  // behövs??
+        //        Dish = dish,
+        //        Cart = cart,
         //        CartItemIngredients = new List<CartItemIngredient>(),
         //        Quantity = 1
         //    };
 
-        //    foreach (var item in dish.DishIngredients.Where(di => di.checkboxAnswer))
+        //    foreach (var item in dish.DishIngredients)
         //    {
         //        var cartItemIngredient = new CartItemIngredient
         //        {
-        //            Enabled = item.checkboxAnswer,
         //            Ingredient = item.Ingredient,
-        //            CartItem = cartItem   // behövs ??
+        //            CartItem = cartItem
         //        };
         //        cartItem.CartItemIngredients.Add(cartItemIngredient);
         //    }
-
-        //    // mir tror 
-        //    //var ingredients = _context.CartItemIngredients.Include(c => c.Ingredient)
-        //    //    .ThenInclude(ci => ci.DishIngredients)
-        //    //    .FirstOrDefault(d => d.IngredientId == id && d.Enabled);
-
         //    cart.CartItems.Add(cartItem);
 
         //    _context.SaveChanges();
 
-        //    return cart.cartItems
-
+        //    return cart.CartItems;
         //}
-
-
-        ///////////////////////////////////////////////////////////////
-
-        public List<CartItem> AddToCart(int?  dishId, HttpContext httpContext)
-        {
-
-
-            if (dishId == null)
-            {
-                //Gör något här!
-
-                //return NotFound();
-            }
-
-            var dish = _context.Dishes
-                .Include(d => d.DishIngredients)
-                .ThenInclude(di => di.Ingredient)
-                .FirstOrDefault(m => m.DishId == dishId);
-
-            var cartID = httpContext.Session.GetInt32("CartSession");
-
-            Cart cart;
-
-            if (httpContext.Session.GetInt32("CartSession") == null)
-            {
-                cart = new Cart
-                {
-                    CartItems = new List<CartItem>()
-                };
-
-                _context.Cart.Add(cart);
-                _context.SaveChanges();
-                httpContext.Session.SetInt32("CartSession", cart.CartId);
-                cartID = cart.CartId;
-            }
-
-            cart = _context.Cart.Include(c => c.CartItems)
-                .ThenInclude(ci => ci.Dish)
-                .ThenInclude(d => d.DishIngredients)
-                .SingleOrDefault(c => c.CartId == cartID);
-
-            CartItem cartItem = new CartItem
-            {
-                Dish = dish,
-                Cart = cart,
-                CartItemIngredients = new List<CartItemIngredient>(),
-                Quantity = 1
-            };
-
-            foreach (var item in dish.DishIngredients)
-            {
-                var cartItemIngredient = new CartItemIngredient
-                {
-                    Ingredient = item.Ingredient,
-                    CartItem = cartItem
-                };
-                cartItem.CartItemIngredients.Add(cartItemIngredient);
-            }
-            cart.CartItems.Add(cartItem);
-
-            _context.SaveChanges();
-
-            return cart.CartItems;
-        }
 
     }
 }

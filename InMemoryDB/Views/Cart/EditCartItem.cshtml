@@ -1,5 +1,8 @@
 ﻿@model PapaPizza.Models.CartItem
 @inject PapaPizza.Services.IngredientService ingredientService
+@inject PapaPizza.Services.CartService cartService
+
+@using Microsoft.AspNetCore.Http
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,34 +11,35 @@
 <h2>Edit Dish</h2>
 
 <h4>@Model.Dish.Name</h4>
-<h4>Price: @Model.Dish.Price kr</h4>
+
+<h4>@cartService.GetTotal(Context)</h4>
 
 @*@foreach (var item in ingredientService.GetIngredients())
-{
-
-    if (Model.CartItemIngredients.Any(x => x.IngredientId == item.IngredientId && x.Enabled))
     {
 
-        <input checked type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-            <label asp-for="@item.Name">@item.Name</label>
-                                <br />
-    }
-    else
-    {
-        <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-            <label asp-for="@item.Name">@item.Name</label>
-                                <br />
-    }
-
-    // behövs inte 
-    @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
+        if (Model.CartItemIngredients.Any(x => x.IngredientId == item.IngredientId && x.Enabled))
         {
-            @foreach (var i in item.Dish.DishIngredients)
-            {
-                <span>@i.IngredientId</span>
-            }
+
+            <input checked type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                <label asp-for="@item.Name">@item.Name</label>
+                                    <br />
         }
-}*@
+        else
+        {
+            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
+                <label asp-for="@item.Name">@item.Name</label>
+                                    <br />
+        }
+
+        // behövs inte
+        @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
+            {
+                @foreach (var i in item.Dish.DishIngredients)
+                {
+                    <span>@i.IngredientId</span>
+                }
+            }
+    }*@
 @*<h4>@Html.DisplayNameFor(m => m.CartItems)</h4>*@
 <hr />
 <div class="row">

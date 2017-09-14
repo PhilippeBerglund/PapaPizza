@@ -30,13 +30,13 @@ namespace PapaPizza.Controllers
         }
 
         // GET: CartItems
-        public IActionResult CartIndex(int ? id )
+        public IActionResult CartIndex(int? id)
         {
-             id = HttpContext.Session.GetInt32("CartSession");
+            id = HttpContext.Session.GetInt32("CartSession");
 
             if (id == null)
             {
-                return NotFound();
+                return NotFound("No Dish was Selected, EVER");
             }
 
             // test->
@@ -51,12 +51,12 @@ namespace PapaPizza.Controllers
             var cart = _context.Cart
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.CartItemIngredients)
-                .ThenInclude(cii => cii.Ingredient) // ------------------>
+                .ThenInclude(cii => cii.Ingredient)
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Dish)
                 .ThenInclude(d => d.DishIngredients)
                 .ThenInclude(di => di.Ingredient)
-                .FirstOrDefault(m=> m.CartId == id);
+                .FirstOrDefault(m => m.CartId == id);
 
             return View(cart);
 
@@ -160,7 +160,7 @@ namespace PapaPizza.Controllers
         // GET: Carts/Edit/5
         public async Task<IActionResult> EditCartItem(int? id)
         {
-          
+
             if (id == null)
             {
                 return NotFound();
@@ -193,7 +193,7 @@ namespace PapaPizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditCartItem(int id, [Bind("CartItemId, DishId")] CartItem cartItem,  IFormCollection form)
+        public async Task<IActionResult> EditCartItem(int id, [Bind("CartItemId, DishId")] CartItem cartItem, IFormCollection form)
         {
             if (id != cartItem.CartItemId)
             {
@@ -225,10 +225,18 @@ namespace PapaPizza.Controllers
                         {
                             Ingredient = ingredient,
                             Enabled = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}")
+                            ,Price = ingredient.Price  //----------------->
                         };
                         itemToEdit.CartItemIngredients.Add(cartItemIngredient);
-
                     }
+
+
+                    var home = _ingredientService.ListOfHomeIngredients(id);
+                    var away = itemToEdit.CartItemIngredients.Where(c=> c.Enabled).ToList();
+                    var keep = away.Where(k => !home.Any(h => h.IngredientId == k.IngredientId));
+
+                    away.RemoveAll(x => home.Any(r => r.IngredientId == x.IngredientId));
+
                     //_context.CartItems.Add(cartItem);
                     //_context.Cart.Add
                     await _context.SaveChangesAsync();

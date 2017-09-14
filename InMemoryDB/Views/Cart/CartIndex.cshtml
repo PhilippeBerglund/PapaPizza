@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Http
-@model PapaPizza.Models.Cart
+﻿@model PapaPizza.Models.Cart
 @inject PapaPizza.Services.CartService cartService
 
 @{
@@ -10,17 +9,14 @@
     <thead>
         <tr>
             <th>
-                @*@Html.DisplayNameFor(model => model.Cart)*@
                 <sapn>Dish</sapn>
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.Dish.Category)*@
                 <sapn>Category</sapn>
 
             </th>
             <th>
                 <span>Price</span>
-                @*@Html.DisplayNameFor(model => model.Dish.Price)*@
             </th>
         </tr>
     </thead>
@@ -38,6 +34,8 @@
                                 @foreach (var it in item.CartItemIngredients.Where(u => u.Enabled))
                                 {
                                    <span>@it.Ingredient.Name</span>
+                                <span>@it.Ingredient.Price</span>
+
                                 }
                        
                         </td>
