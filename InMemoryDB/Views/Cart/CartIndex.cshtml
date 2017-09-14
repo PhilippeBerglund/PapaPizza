@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
-@model IEnumerable<PapaPizza.Models.Cart>
+@model PapaPizza.Models.Cart
 @inject PapaPizza.Services.CartService cartService
 
 @{
@@ -27,36 +27,29 @@
     <tbody>
         @if (Model != null)
         {
-            @foreach (var cart in Model)
-            {
-
-                @foreach (var item in cart.CartItems)
+            
+                @foreach (var item in Model.CartItems)
                 {
                     <tr>
                         <td>
                             <b>@item.Dish.Name</b>
                             <br />
 
-                            @if (item.CartItemIngredients.Any(x => x.Enabled  )) 
-                            {
-                                // extra Ingredient null  Printing non instead of enabled true 
-                                @foreach (var i in item.CartItemIngredients)
+                                @foreach (var it in item.CartItemIngredients.Where(u => u.Enabled))
                                 {
-                                   <span>@i.Ingredient.Name</span>
+                                   <span>@it.Ingredient.Name</span>
                                 }
-                                @*@item.CartItemIngredients*@
-                            }
-                           @* else { <span>sorry boss</span> }*@
+                       
                         </td>
 
                         <td>
-                            @item.Dish.Category.Name
+                            @*@item.Dish.Category.Name*@
                         </td>
                         <td>
                             @item.Dish.Price
                         </td>
                         <td>
-                                <a asp-action="EditCartItem" asp-route-id="@item.CartItemId">Edit Ingredients</a>
+                                <a asp-action="EditCartItem" asp-route-id="@item.CartItemId.">Edit Ingredients</a>
                         </td>
 
 
@@ -85,7 +78,7 @@
                     </tr>
                 }
                 
-            }
+          
             <tr>
                 <td>
                     <b>Total:</b>

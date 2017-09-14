@@ -30,23 +30,15 @@ namespace PapaPizza.Controllers
         }
 
         // GET: CartItems
-        public async Task<IActionResult> CartIndex(int? id)
+        public IActionResult CartIndex()
         {
-            id = HttpContext.Session.GetInt32("CartSession");
+            var id = HttpContext.Session.GetInt32("CartSession");
 
             if (id == null)
             {
                 return NotFound();
             }
-
-            //var cartItem = await _context.CartItems
-            //        .Include(ci => ci.CartItemIngredients)
-            //    .Include(c => c.Dish)
-            //    .ThenInclude(d => d.DishIngredients)
-            //    .SingleOrDefaultAsync(c => c.CartItemId == id);
-
-
-            var catList = _context.Categories.ToListAsync();
+            
             // test->
             //var testo = dish.Select(x => x.CartId);
             //foreach (var item in testo)
@@ -61,13 +53,10 @@ namespace PapaPizza.Controllers
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Dish)
                 .ThenInclude(d => d.DishIngredients)
-                .ThenInclude(di => di.Ingredient);
+                .ThenInclude(di => di.Ingredient)
+                .FirstOrDefault(m=> m.CartId == id);
 
-
-
-            _context.SaveChanges();
-
-            return View("CartIndex", cart);
+            return View(cart);
 
         }
 
@@ -214,38 +203,31 @@ namespace PapaPizza.Controllers
                 {
                     var itemToEdit = await _context.CartItems
                   .Include(ci => ci.CartItemIngredients)
+                  .ThenInclude(cii => cii.Ingredient)  // patric
                   .Include(d => d.Dish)
+                  .ThenInclude(di => di.DishIngredients)  // patric
+                  .ThenInclude(dii => dii.Ingredient)   // patric
                   .SingleOrDefaultAsync(m => m.CartItemId == id);
 
-                    foreach (var dishIngredient in itemToEdit.CartItemIngredients)
+                    foreach (var cartItemIngredient in itemToEdit.CartItemIngredients)
                     {
-                        _context.Remove(dishIngredient);
+                        _context.Remove(cartItemIngredient);
                     }
                     await _context.SaveChangesAsync();
-
-                    cartItem = new CartItem
-                    {
-                        CartId = cartItem.CartId, // test
-                        Cart = cartItem.Cart,  // behövs??
-                        Dish = itemToEdit.Dish,
-                        DishId = itemToEdit.DishId, // test
-
-                        CartItemIngredients = new List<CartItemIngredient>(),
-                        Quantity = 1
-                    };
+                    itemToEdit.CartItemIngredients = new List<CartItemIngredient>();
 
                     foreach (var ingredient in _ingredientService.GetIngredients())
                     {
-                        var cartItemIngrtedient = new CartItemIngredient
+                        var cartItemIngredient = new CartItemIngredient
                         {
-
                             Ingredient = ingredient,
                             Enabled = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}")
                         };
-                        cartItem.CartItemIngredients.Add(cartItemIngrtedient);
+                        itemToEdit.CartItemIngredients.Add(cartItemIngredient);
 
                     }
-                    _context.CartItems.Add(cartItem);
+                    //_context.CartItems.Add(cartItem);
+                    //_context.Cart.Add
                     await _context.SaveChangesAsync();
 
                 }
