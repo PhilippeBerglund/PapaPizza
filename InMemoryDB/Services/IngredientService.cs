@@ -36,7 +36,7 @@ namespace PapaPizza.Services
         }
 
         // Get List of Checked Ingredients
-        public List<DishIngredient> ListOfHomeIngredients(int id)
+        public List<DishIngredient> ListOfDishIngredients(int id)
         {
             var ingredients = _context.DishIngredients.Include(di => di.Ingredient).Where(di => di.DishId == id && di.checkboxAnswer);
             //string checkedIngredients = "";

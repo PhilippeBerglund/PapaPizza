@@ -60,7 +60,7 @@ namespace PapaPizza.Services
         }
 
 
-        public decimal? GetTotal(HttpContext httpContext)
+        public decimal? TotalCartSum(HttpContext httpContext)
         {
             decimal? total = 0;
 
@@ -74,31 +74,32 @@ namespace PapaPizza.Services
             return total;
         }
 
-
-        public decimal ModifiedPrice (int id, List<CartItemIngredient> cartItemIngredients)
+      
+        public decimal ModifiedCartItemPrice (int cartItemId, List<CartItemIngredient> cartItemIngredients)
         {
-            var home = _ingredientService.ListOfHomeIngredients(id);
-            var homeIngredient = home.Select(x => x.Ingredient).ToList();
-            //var itemToEdit = "";
+            var dishIngredients = _ingredientService.ListOfDishIngredients(cartItemId);
+            var ingredient = dishIngredients.Select(x => x.Ingredient).ToList();
 
-            var away = cartItemIngredients.Where(c => c.Enabled).Select(v => v.Ingredient).ToList();
-            //var awayIngredient = away.Select(c => c.Ingredient).ToList();
+            var addedIngredients = cartItemIngredients.Where(c => c.Enabled).Select(v => v.Ingredient).ToList();
 
-            away.RemoveAll(a => homeIngredient.Contains(a));
+            addedIngredients.RemoveAll(a => ingredient.Contains(a));
             var price = 0;
-            foreach (var item in away)
+            foreach (var item in addedIngredients)
             {
                 price += Convert.ToInt32(item.Price);
             }
-            price.ToString();
-            var testo = 0;
-            //foreach (var item in _context.CartItems)
-            //{
-            //     testo  +=  Convert.ToInt32(item.Dish.Price + price);
-            //}
 
-            var newPrice =  _context.CartItems.Select(c => c.Dish.Price + price).Single();
+            var newPrice =  _context.CartItems.Where(d => d.CartItemId == cartItemId).Select(c => c.Dish.Price + price).FirstOrDefault();
             return newPrice;
+        }
+
+
+        public int GenerateCartItemID()
+        {
+            int _min = 1000;
+            int _max = 9999;
+            Random _rdm = new Random();
+            return _rdm.Next(_min, _max);
         }
 
     }

@@ -104,6 +104,7 @@ namespace PapaPizza.Controllers
 
             CartItem cartItem = new CartItem
             {
+               // CartItemId = _cartService.GenerateCartItemID(),
                 CartId = cart.CartId, // test
                 Dish = dish,
                 DishId = dish.DishId, // test
@@ -118,6 +119,7 @@ namespace PapaPizza.Controllers
                 {
                     Enabled = item.checkboxAnswer,
                     Ingredient = item.Ingredient,
+                    //CartItemId = cartItem.CartItemId,
                     CartItem = cartItem   // behövs ??
                 };
                 cartItem.CartItemIngredients.Add(cartItemIngredient);
@@ -132,8 +134,7 @@ namespace PapaPizza.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Dishes"); // bör ev skicka med cart.CartItems
-
+            return RedirectToAction("Index", "Dishes"); 
         }
 
         // GET: Carts/Create
@@ -207,10 +208,10 @@ namespace PapaPizza.Controllers
                 {
                     var itemToEdit = await _context.CartItems
                   .Include(ci => ci.CartItemIngredients)
-                  .ThenInclude(cii => cii.Ingredient)  // patric
+                  .ThenInclude(cii => cii.Ingredient)  
                   .Include(d => d.Dish)
-                  .ThenInclude(di => di.DishIngredients)  // patric
-                  .ThenInclude(dii => dii.Ingredient)   // patric
+                  .ThenInclude(di => di.DishIngredients)  
+                  .ThenInclude(dii => dii.Ingredient)   
                   .SingleOrDefaultAsync(m => m.CartItemId == id);
 
                     foreach (var cartItemIngredient in itemToEdit.CartItemIngredients)
@@ -226,33 +227,10 @@ namespace PapaPizza.Controllers
                         {
                             Ingredient = ingredient,
                             Enabled = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}"),
-                            Price = ingredient.Price
+                            //Price = ingredient.Price
                         };
                         itemToEdit.CartItemIngredients.Add(cartItemIngredient);
                     }
-
-                    var home = _ingredientService.ListOfHomeIngredients(id);
-                    var homeIngredient = home.Select(x => x.Ingredient).ToList();
-
-                    var away = itemToEdit.CartItemIngredients.Where(c => c.Enabled).Select(v => v.Ingredient).ToList();
-                    //var awayIngredient = away.Select(c => c.Ingredient).ToList();
-
-                    away.RemoveAll(a => homeIngredient.Contains(a));
-                    var price = 0;
-                    foreach (var item in away)
-                    {
-                        price +=  Convert.ToInt32(item.Price) ;
-                    }
-                    price.ToString();
-                    var testo = 0;
-                    //foreach (var item in _context.CartItems)
-                    //{
-                    //     testo  +=  Convert.ToInt32(item.Dish.Price + price);
-                    //}
-
-                    var newPrice =  _context.CartItems.Select(c => c.Dish.Price + price);
-
-                    _cartService.ModifiedPrice(id, itemToEdit.CartItemIngredients);
 
                     await _context.SaveChangesAsync();
 

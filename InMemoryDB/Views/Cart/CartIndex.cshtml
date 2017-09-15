@@ -34,9 +34,7 @@
                         @foreach (var it in item.CartItemIngredients.Where(u => u.Enabled))
                         {
                             <span>@it.Ingredient.Name</span>
-                            <span>@it.Ingredient.Price</span>
                         }
-
                     </td>
 
                     <td>
@@ -44,33 +42,20 @@
                     </td>
                     <td>
                         @*@item.Dish.Price*@
-                        <span>@cartService.ModifiedPrice(item.CartId, item.CartItemIngredients)</span>
-
+                        <span>@cartService.ModifiedCartItemPrice(item.CartItemId, item.CartItemIngredients)</span>
 
                     </td>
                     <td>
-                        <a asp-action="EditCartItem" asp-route-id="@item.CartItemId">Edit Ingredients</a>
+                        @if (@item.CartItemIngredients.Count<CartItemIngredient>() != 0)
+                        {
+                            <a asp-action="EditCartItem" asp-route-id="@item.CartItemId">Edit Ingredients</a>
+                            <br />
+                        }
+                        <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartItemId">Remove Dish</a>
+
                     </td>
 
-
-
-
                     @*<td>
-                            <b>@item.Dish.Name</b>
-                            <br />
-                            @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
-                            {
-                                @foreach (var i in item.Dish.DishIngredients)
-                                {
-                                    <span>@i.Ingredient.Name</span>
-                                }
-                                @item.CartItemIngredients
-                            }
-                        </td>*@
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.Dish.Price)
-                        </td>
-                        <td>
                             <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a>
                             <a asp-action="Details" asp-route-id="@item.CartId">Details</a>
                             <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartId">Remove</a>
@@ -85,7 +70,8 @@
                 </td>
                 <td></td>
                 <td>
-                    <span>@cartService.GetTotal(Context)</span>
+                    <span>@cartService.TotalCartSum(Context)</span>
+                    @*@cartService.CalculateCartSum(Model.CartItems.Count());*@
                 </td>
             </tr>
         }
@@ -95,13 +81,13 @@
 <br />
 @*@if (Model != null)*@
 
-@{var id = cartService.CheckCart(); // Context
+@{var id = cartService.CheckCart();
+
     @if (id != 0)
     {
         <a asp-controller="Cart" asp-action="EmptyCart" asp-route-id="@id">Empty Cart</a>
         <br />
         <a asp-controller="Orders" asp-action="OrderIndex" asp-route-id="@id">Checkout</a>
-
     }
     else
     {<h3>Cart is Empty</h3>}
