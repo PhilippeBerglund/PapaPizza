@@ -12,6 +12,7 @@ using PapaPizza.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
+
 namespace PapaPizza.Controllers
 {
     public class CartController : Controller
@@ -224,21 +225,35 @@ namespace PapaPizza.Controllers
                         var cartItemIngredient = new CartItemIngredient
                         {
                             Ingredient = ingredient,
-                            Enabled = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}")
-                            ,Price = ingredient.Price  //----------------->
+                            Enabled = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}"),
+                            Price = ingredient.Price
                         };
                         itemToEdit.CartItemIngredients.Add(cartItemIngredient);
                     }
 
-
                     var home = _ingredientService.ListOfHomeIngredients(id);
-                    var away = itemToEdit.CartItemIngredients.Where(c=> c.Enabled).ToList();
-                    var keep = away.Where(k => !home.Any(h => h.IngredientId == k.IngredientId));
+                    var homeIngredient = home.Select(x => x.Ingredient).ToList();
 
-                    away.RemoveAll(x => home.Any(r => r.IngredientId == x.IngredientId));
+                    var away = itemToEdit.CartItemIngredients.Where(c => c.Enabled).Select(v => v.Ingredient).ToList();
+                    //var awayIngredient = away.Select(c => c.Ingredient).ToList();
 
-                    //_context.CartItems.Add(cartItem);
-                    //_context.Cart.Add
+                    away.RemoveAll(a => homeIngredient.Contains(a));
+                    var price = 0;
+                    foreach (var item in away)
+                    {
+                        price +=  Convert.ToInt32(item.Price) ;
+                    }
+                    price.ToString();
+                    var testo = 0;
+                    //foreach (var item in _context.CartItems)
+                    //{
+                    //     testo  +=  Convert.ToInt32(item.Dish.Price + price);
+                    //}
+
+                    var newPrice =  _context.CartItems.Select(c => c.Dish.Price + price);
+
+                    _cartService.ModifiedPrice(id, itemToEdit.CartItemIngredients);
+
                     await _context.SaveChangesAsync();
 
                 }
