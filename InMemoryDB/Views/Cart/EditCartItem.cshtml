@@ -12,7 +12,7 @@
 
 <h4>@Model.Dish.Name</h4>
 
-<h4>@cartService.TotalCartSum(Context)</h4>
+@*<h4>@cartService.TotalCartSum(Model.CartItemId)</h4>*@
 
 @*@foreach (var item in ingredientService.GetIngredients())
     {
@@ -43,7 +43,7 @@
 @*<h4>@Html.DisplayNameFor(m => m.CartItems)</h4>*@
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="EditCartItem">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CartItemId" />
@@ -74,14 +74,22 @@
                     <input asp-for="ApplicationUserId" class="form-control" />
                     <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
                 </div>*@
+            <br/>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-info" />
             </div>
         </form>
     </div>
+    <div class="col-md-4">
+        <div style="background-color:beige">
+            @Html.Partial("_CartIndex")
+        </div>
+    </div>
 </div>
+
 
 <div>
     <a asp-action="CartIndex">Back to List!</a>
 </div>
+
 

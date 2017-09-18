@@ -39,11 +39,11 @@ namespace PapaPizza.Services
         public List<DishIngredient> ListOfDishIngredients(int id)
         {
             var ingredients = _context.DishIngredients.Include(di => di.Ingredient).Where(di => di.DishId == id && di.checkboxAnswer);
-            //string checkedIngredients = "";
-            //foreach (var ing  in ingredients)
-            //{
-            //    checkedIngredients += ing.Ingredient.Name + " "; 
-            //}
+            string checkedIngredients = "";
+            foreach (var ing in ingredients)
+            {
+                checkedIngredients += ing.Ingredient.Name + " ";
+            }
             return ingredients.ToList();
         }
     }

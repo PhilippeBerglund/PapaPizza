@@ -21,5 +21,26 @@ namespace PapaPizza.Models.ManageViewModels
         public string PhoneNumber { get; set; }
 
         public string StatusMessage { get; set; }
+
+        [Required]
+        [Display(Name = "Street")]
+        public string Street { get; set; }
+
+        [Required]
+        [Display(Name = "Street No")]
+        public string StreetNo { get; set; }
+
+        [Required]
+        [Display(Name = "Zip code")]
+        public string Zip { get; set; }
+
+        [Required]
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Required]
+        [CreditCard]
+        [Display(Name = "Card No")]
+        public string CardNo { get; set; }
     }
 }

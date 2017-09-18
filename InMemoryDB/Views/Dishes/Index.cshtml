@@ -27,7 +27,9 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Price)
                         </th>
-                        <th></th>
+                        <th>
+                            <span>Add to Cart</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,7 +63,7 @@
                                     @*<input type="submit" value="Save" class="btn btn-default" />*@
 
                                     <a asp-controller="Cart" asp-action="ItemToCart" asp-route-id="@item.DishId">
-                                        <i class="glyphicon glyphicon-shopping-cart" style="color:indianred"></i>
+                                     <i id="cart" class="glyphicon glyphicon-shopping-cart" ></i>
                                     </a>
 
                                 }

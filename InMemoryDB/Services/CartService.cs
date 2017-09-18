@@ -36,7 +36,6 @@ namespace PapaPizza.Services
             {
                 _context.CartItems.Remove(item);
             }
-            // Save changes
             _context.SaveChanges();
         }
 
@@ -58,26 +57,11 @@ namespace PapaPizza.Services
             _context.CartItems.Remove(item);
             _context.SaveChangesAsync();
         }
-
-
-        public decimal? TotalCartSum(HttpContext httpContext)
+        // dishid added-->
+        public decimal ModifiedCartItemPrice ( int cartItemId, List<CartItemIngredient> cartItemIngredients, int dishID)
         {
-            decimal? total = 0;
-
-            decimal? cartID = httpContext.Session.GetInt32("CartSession");
-
-            total = (from cartItems in _context.CartItems
-                     where cartItems.CartId == cartID
-                     select (int?)cartItems.Quantity *
-                     cartItems.Dish.Price).Sum();
-
-            return total;
-        }
-
-      
-        public decimal ModifiedCartItemPrice (int cartItemId, List<CartItemIngredient> cartItemIngredients)
-        {
-            var dishIngredients = _ingredientService.ListOfDishIngredients(cartItemId);
+           
+            var dishIngredients = _ingredientService.ListOfDishIngredients(dishID);
             var ingredient = dishIngredients.Select(x => x.Ingredient).ToList();
 
             var addedIngredients = cartItemIngredients.Where(c => c.Enabled).Select(v => v.Ingredient).ToList();
@@ -94,13 +78,56 @@ namespace PapaPizza.Services
         }
 
 
-        public int GenerateCartItemID()
+        public decimal? TotalCartSum(int cartItemId)
         {
-            int _min = 1000;
-            int _max = 9999;
-            Random _rdm = new Random();
-            return _rdm.Next(_min, _max);
+           decimal? totalPrice = 0;
+
+           decimal ? price = _context.CartItems.Where(i => i.CartItemId == cartItemId)
+                     .Select(q => q.Quantity * q.Dish.Price).Sum();
+
+            foreach (var itemPrice in _context.CartItems)
+            {
+                totalPrice += itemPrice.Dish.Price;
+
+                totalPrice += itemPrice.CartItemIngredients.Where(s => s.Enabled).Sum(cii => itemPrice.Dish
+                    .DishIngredients.Any(di => di.IngredientId == cii.IngredientId) ? 0 : cii.Ingredient.Price);
+            }
+            return totalPrice;
+
         }
+
+
+
+
+        // Test
+        public decimal TotalPriceForCart(int id)
+        {
+
+            decimal totalPrice = 0;
+
+            var cart = _context.Cart.Include(x => x.CartItems).ThenInclude(x => x.CartItemIngredients).ThenInclude(x => x.Ingredient).FirstOrDefault(x => x.CartId == id);
+
+            var cartIngredients = _context.CartItemIngredients.Include(x => x.Ingredient).Where(x => x.Enabled);
+
+            foreach (var itemPrice in cart.CartItems)
+            {
+                totalPrice += itemPrice.Dish.Price;
+
+                totalPrice += itemPrice.CartItemIngredients.Where(s => s.Enabled).Sum(cii => itemPrice.Dish
+                    .DishIngredients.Any(di => di.IngredientId == cii.IngredientId) ? 0 : cii.Ingredient.Price);
+            }
+            return totalPrice;
+        }
+
+        //public int GenerateCartItemID()
+        //{
+        //    int _min = 1000;
+        //    int _max = 9999;
+        //    Random _rdm = new Random();
+        //    return _rdm.Next(_min, _max);
+        //}
+
+
 
     }
 }

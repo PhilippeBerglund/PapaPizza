@@ -42,10 +42,11 @@ namespace PapaPizza.Controllers
             var cart = _context.Cart
                .Include(c => c.CartItems)
                .ThenInclude(ci => ci.Dish)
-              // .ThenInclude(cii => cii.CartItem)// --------------------------------------------------->
-          //     .ThenInclude(ci => ci.CartItemIngredients)
                .ThenInclude(d => d.DishIngredients)
                .ThenInclude(di => di.Ingredient)
+               .Include(cii => cii.CartItems)// --------------------------------------------------->
+               .ThenInclude(ci => ci.CartItemIngredients)
+
                .ToList();
 
             return View(cart);

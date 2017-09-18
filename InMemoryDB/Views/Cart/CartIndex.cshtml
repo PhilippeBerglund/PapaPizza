@@ -42,7 +42,7 @@
                     </td>
                     <td>
                         @*@item.Dish.Price*@
-                        <span>@cartService.ModifiedCartItemPrice(item.CartItemId, item.CartItemIngredients)</span>
+                        <span>@cartService.ModifiedCartItemPrice(item.CartItemId, item.CartItemIngredients, item.DishId)</span>
 
                     </td>
                     <td>
@@ -70,27 +70,46 @@
                 </td>
                 <td></td>
                 <td>
-                    <span>@cartService.TotalCartSum(Context)</span>
-                    @*@cartService.CalculateCartSum(Model.CartItems.Count());*@
+                    <span>@cartService.TotalCartSum(Model.CartItems.Select(i => i.CartItemId).FirstOrDefault())</span>
+                    @*<span>@cartService.TotalPriceForCart(Model.CartId)</span>*@
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<a asp-controller="Dishes" asp-action="Index">Return to Menu</a>
+
 <br />
 @*@if (Model != null)*@
 
 @{var id = cartService.CheckCart();
 
+    <div class="btn btn-default" style="margin: 1%">
+        <a asp-controller="Dishes" asp-action="Index" style="text-decoration:none">Return to Menu</a>
+    </div>
+
     @if (id != 0)
     {
-        <a asp-controller="Cart" asp-action="EmptyCart" asp-route-id="@id">Empty Cart</a>
-        <br />
-        <a asp-controller="Orders" asp-action="OrderIndex" asp-route-id="@id">Checkout</a>
+        <div class="btn btn-default" style="margin: 1%">
+            <a asp-controller="Cart" asp-action="EmptyCart" style="text-decoration:none" asp-route-id="@id">Empty Cart</a>
+        </div>
+
+        //--------------------------------------------------
+        if (User.IsInRole("User"))
+        {
+            <a class="btn btn-primary" asp-action="Payment" asp-controller="Payment">User Checkout</a>
+        }
+        else
+        {
+                <a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="Payment">Guest Checkout</a>
+        }
+
+        //-----------------------------------------------
+
+        <div class="btn btn-default" style="margin: 1%">
+            <a asp-controller="Orders" asp-action="OrderIndex" style="text-decoration:none" asp-route-id="@id">Checkout</a>
+        </div>
     }
     else
     {<h3>Cart is Empty</h3>}
-
 }
-

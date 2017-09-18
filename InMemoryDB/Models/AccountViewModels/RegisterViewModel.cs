@@ -9,6 +9,39 @@ namespace PapaPizza.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Street")]
+        public string Street { get; set; }
+
+        [Required]
+        [Display(Name = "Street No")]
+        public string StreetNo { get; set; }
+
+        [Required]
+        [Display(Name = "Zip code")]
+        public string Zip { get; set; }
+
+        [Required]
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Required]
+        [Display(Name = "Phone No")]
+        public string Phone { get; set; }
+
+        [Required]
+        [CreditCard]
+        [Display(Name = "Card No")]
+        public string CardNo { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

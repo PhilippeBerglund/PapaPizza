@@ -170,6 +170,7 @@ namespace PapaPizza.Controllers
 
             var cartItem = await _context.CartItems
                 .Include(ci => ci.Dish)
+                .ThenInclude(d => d.DishIngredients)
                 .Include(ci => ci.CartItemIngredients)
                 .ThenInclude(cii => cii.Ingredient)
                 .SingleOrDefaultAsync(m => m.CartItemId == id);

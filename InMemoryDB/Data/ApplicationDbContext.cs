@@ -67,7 +67,7 @@ namespace PapaPizza.Data
         public DbSet<Cart> Cart { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<CartItemIngredient> CartItemIngredients { get; set; }
-        public DbSet<PapaPizza.Models.Order> Order { get; set; }
+        public DbSet<Order> Order { get; set; }
 
     }
 }

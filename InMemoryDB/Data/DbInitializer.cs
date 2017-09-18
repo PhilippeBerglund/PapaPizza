@@ -17,6 +17,7 @@ namespace PapaPizza.Data
             {
                 UserName = "student@test.co.uk",
                 Email = "student@test.co.uk",
+
             };
             var r = userManager.CreateAsync(aUser, "Pa$$w0rd");
 
