@@ -17,7 +17,13 @@ namespace PapaPizza.Data
             {
                 UserName = "student@test.co.uk",
                 Email = "student@test.co.uk",
-
+                FirstName = "Jonh",
+                LastName = "Doe",
+                Street = "Good street 1",
+                Zip = "123 45",
+                City = "Goodtown",
+                PhoneNumber = "123456789",
+                CreditCardNumber = "232323232323"
             };
             var r = userManager.CreateAsync(aUser, "Pa$$w0rd");
 

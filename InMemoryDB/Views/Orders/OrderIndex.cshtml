@@ -4,12 +4,6 @@
     ViewData["Title"] = "Index";
 }
 <h2>Order Index</h2>
-
-<form asp-action="OrderIndex" asp-controller="Orders">
-    <input asp-for="ApplicationUser.FirstName" />
-    <label asp-for="ApplicationUser.FirstName"></label>
-</form>
-
 <table class="table">
     <thead>
         <tr>
@@ -23,34 +17,14 @@
     </thead>
     <tbody>
 
-        @*@foreach (var item in Model)
-            {*@
-
-        @*<td>
-                @Html.DisplayFor(modelItem => item.ApplicationUserId)
-            </td>*@
-        @*<td>
-                @Html.DisplayFor(modelItem => item.CartItems)
-            </td>*@
-
         @foreach (var dish in Model.Cart.CartItems)
             {
             <tr>
                 <td>
                     <b>@dish.Dish.Name</b>
                     <br />
-                    @*@if (dish.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
-                        {
-                            @foreach (var it in dish.Dish.DishIngredients)
-                            {
-                                <span>@it.Ingredient.Name</span>
-                            }
-                            @item.CartItemIngredients
-                        }*@
-                    @*@Html.DisplayNameFor(model => i.Dish.Name)*@
                 </td>
                 <td>
-                    @*@dish.Dish.Price*@
                     <span>
                         @cartService.ModifiedCartItemPrice(dish.CartItemId, dish.CartItemIngredients, dish.DishId)
                     </span>
@@ -70,10 +44,27 @@
     </tbody>
 </table>
 
-<input type="button" class="btn btn-info" onclick="history.go(-1)" value="Return to Cart" />
+<form asp-action="OrderIndex" asp-controller="Orders">
+    <input asp-for="ApplicationUser.FirstName" />
+    <label asp-for="ApplicationUser.FirstName"></label>
+    <span asp-validation-for="ApplicationUser.FirstName" class="text-danger"></span>
 
-<a class="btn btn-success" asp-action="Buy" asp-route-id="">Buy</a>
+    <input asp-for="ApplicationUser.LastName" />
+    <label asp-for="ApplicationUser.LastName"></label>
+    <span asp-validation-for="ApplicationUser.LastName" class="text-danger"></span>
 
+    <input asp-for="ApplicationUser.Street" />
+    <label asp-for="ApplicationUser.Street"></label>
+    <span asp-validation-for="ApplicationUser.Street" class="text-danger"></span>
+
+
+
+    
+
+    <input type="button" class="btn btn-info" onclick="history.go(-1)" value="Return to Cart" />
+
+    <button type="submit" class="btn btn-success">Buy</button>
+</form>
 
 @*<td>
         @item.Dish.Price

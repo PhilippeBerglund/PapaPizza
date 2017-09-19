@@ -27,15 +27,13 @@ namespace PapaPizza.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> OrderIndex(int? session, ApplicationUser guest)
+        public async Task<IActionResult> OrderIndex()
         {
-            session = HttpContext.Session.GetInt32("CartSession");
+            var session = HttpContext.Session.GetInt32("CartSession");
             var user = await _userManager.GetUserAsync(User);
-            //if (User.Identity.IsAuthenticated)
-            //{
 
-                var catList = _context.Categories.ToListAsync();
-                var cart = _context.Cart
+            var catList = _context.Categories.ToListAsync();
+            var cart = _context.Cart
                    .Include(c => c.CartItems)
                    .ThenInclude(ci => ci.Dish)
                    .ThenInclude(d => d.DishIngredients)
@@ -45,39 +43,100 @@ namespace PapaPizza.Controllers
                    .ThenInclude(cii => cii.Ingredient)
                                    .FirstOrDefault(m => m.CartId == session);
 
-            if (user != null)
+            var newOrder = new OrderViewModel
             {
+                Cart = cart,
 
-                var newOrder = new OrderViewModel
-                {
-                    Cart = cart,
-                    ApplicationUser = user,
-                    Order = new Order
-                    {
-                        ApplicationUserId = user.Id,
-                        CartId = cart.CartId
-                    }
-                };
+            };
 
-                return View(newOrder);
-            }
-            else if(guest.Id != null )
+            if (User.Identity.IsAuthenticated)
             {
-                var newGuest = guest.FirstName;
+                newOrder.ApplicationUser = user;
 
-                return View("OrderIndex",newGuest);
-              
+                //var catList = _context.Categories.ToListAsync();
+                //var cart = _context.Cart
+                //   .Include(c => c.CartItems)
+                //   .ThenInclude(ci => ci.Dish)
+                //   .ThenInclude(d => d.DishIngredients)
+                //   .ThenInclude(di => di.Ingredient)
+                //   .Include(cii => cii.CartItems)
+                //   .ThenInclude(ci => ci.CartItemIngredients)
+                //   .ThenInclude(cii => cii.Ingredient)
+                //                   .FirstOrDefault(m => m.CartId == session);
+
+                //var newOrder = new OrderViewModel
+                //{
+                //    Cart = cart,
+                //    //ApplicationUser = user,
+                //    ApplicationUser = new ApplicationUser
+                //    {
+                //        FirstName = user.FirstName,
+                //        LastName = user.LastName,
+                //        Street = user.Street,
+                //        Zip = user.Zip,
+                //        City = user.City,
+                //        Email = user.Email,
+                //        PhoneNumber = user.PhoneNumber
+                //    }
+                //};
+             
             }
-            else return RedirectToAction("Login", "Account");
+
+            return View(newOrder);
         }
+
+
+        //}
+        //            Order = new Order
+        //            {
+        //                ApplicationUserId = user.Id,
+        //                CartId = cart.CartId
+        //            }
+        //        };
+
+        //        if (user != null)
+        //    {
+
+        //        var newOrder = new OrderViewModel
+        //        {
+        //            Cart = cart,
+        //            ApplicationUser = user,
+        //            Order = new Order
+        //            {
+        //                ApplicationUserId = user.Id,
+        //                CartId = cart.CartId
+        //            }
+        //        };
+
+        //        return View(newOrder);
+        //    }
+        //    else if(guest.Id != null )
+        //    {
+        //        var newGuest = guest.FirstName;
+
+        //        return View("OrderIndex",newGuest);
+
+        //    }
+        //    else return RedirectToAction("Login", "Account");
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OrderIndex(Cart cart)
+        public async Task<IActionResult> OrderIndex(OrderViewModel model)
         {
-            var newCart = cart;
-            var cartId = HttpContext.Session.GetInt32("CartSession");
-            return View(newCart);
+           var cartId = HttpContext.Session.GetInt32("CartSession");
+            var order = new Order
+            {
+                CartId = cartId,
+                User = model.ApplicationUser
+            };
+            //order.User.Email = model.ApplicationUser.HomeEmail;
+
+            _context.Order.Add(order);
+            _context.SaveChanges();
+
+            HttpContext.Session.Remove("CartSession");
+
+             return View("OrderConfirm", order);
         }
 
 
@@ -214,7 +273,7 @@ namespace PapaPizza.Controllers
 
 
         [HttpGet]
-        public IActionResult GuestLogin( )
+        public IActionResult GuestLogin()
         {
             var session = HttpContext.Session.GetInt32("CartSession");
 
@@ -222,10 +281,10 @@ namespace PapaPizza.Controllers
             {
                 FirstName = "",
                 LastName = "",
-                Street ="",
-                City ="",
-                PhoneNumber ="",
-                CreditCardNumber ="",
+                Street = "",
+                City = "",
+                PhoneNumber = "",
+                CreditCardNumber = "",
             };
             return View(guest);
         }
@@ -233,7 +292,7 @@ namespace PapaPizza.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GuestLogin( ApplicationUser guest )
+        public IActionResult GuestLogin(ApplicationUser guest)
         {
             if (guest == null)
             {
@@ -246,7 +305,7 @@ namespace PapaPizza.Controllers
             };
             _context.ApplicationUsers.Add(guest);
             _context.SaveChanges();
-            return RedirectToAction("OrderIndex" , guest);
+            return RedirectToAction("OrderIndex", guest);
         }
     }
 }

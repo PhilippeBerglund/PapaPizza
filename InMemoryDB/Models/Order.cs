@@ -12,7 +12,7 @@ namespace PapaPizza.Models
         public string ApplicationUserId { get; set; }
 
         public Cart MyCart { get; set; }
-        public int CartId { get; set; }
+        public int? CartId { get; set; }
 
        // public List<CartItem> CartItems { get; set; }
     }
