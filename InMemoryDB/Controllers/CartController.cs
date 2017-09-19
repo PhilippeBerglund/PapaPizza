@@ -228,39 +228,6 @@ namespace PapaPizza.Controllers
             return View(cartItem);
         }
 
-        // GET: Carts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cart = await _context.Cart
-                .SingleOrDefaultAsync(m => m.CartId == id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
-
-            return View(cart);
-        }
-
-        // POST: Carts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var cart = await _context.Cart.SingleOrDefaultAsync(m => m.CartId == id);
-            _context.Cart.Remove(cart);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(CartIndex));
-        }
-
-        private bool CartExists(int id)
-        {
-            return _context.Cart.Any(e => e.CartId == id);
-        }
 
         //Todo FIX ->
         public int GetCount(int? id)
@@ -277,14 +244,48 @@ namespace PapaPizza.Controllers
             return RedirectToAction (nameof( CartIndex));
         }
 
+        //public async Task<IActionResult> RemoveFromCart(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    _cartService.RemoveCartItem(id);
+        //    return View("CartIndex");
+        //}
+
+        // GET: Dishes/Delete/5
         public async Task<IActionResult> RemoveFromCart(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            _cartService.RemoveCartItem(id);
-            return View("CartIndex");
+
+            var cartItem = await _context.CartItems
+                .SingleOrDefaultAsync(m => m.CartItemId == id);
+            if (cartItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(cartItem);
+        }
+
+        // POST: Carts/Delete/5
+        [HttpPost, ActionName("RemoveFromCart")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var cartItem = await _context.CartItems.SingleOrDefaultAsync(m => m.CartItemId == id);
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(CartIndex));
+        }
+
+        private bool CartExists(int id)
+        {
+            return _context.CartItems.Any(e => e.CartItemId == id);
         }
     }
 }

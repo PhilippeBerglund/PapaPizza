@@ -13,7 +13,6 @@
             </th>
             <th>
                 <sapn>Category</sapn>
-
             </th>
             <th>
                 <span>Price</span>
@@ -23,7 +22,6 @@
     <tbody>
         @if (Model != null)
         {
-
             @foreach (var item in Model.CartItems)
                 {
                 <tr>
@@ -56,6 +54,7 @@
                 </tr>
             }
 
+            @if (Model.CartItems.Count() != 0 ) { 
             <tr>
                 <td>
                     <b>Total:</b>
@@ -65,6 +64,7 @@
                     <span>@cartService.TotalCartSum(Model.CartItems.Select(i => i.CartItemId).FirstOrDefault())</span>
                 </td>
             </tr>
+            }
         }
     </tbody>
 </table>

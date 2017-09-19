@@ -21,7 +21,7 @@ namespace PapaPizza.Data
                 Zip = "123 45",
                 City = "Goodtown",
                 PhoneNumber = "123456789",
-                CreditCardNumber = "232323232323"
+                CreditCardNumber = "1234567890987"
             };
             var r = userManager.CreateAsync(aUser, "Pa$$w0rd");
 

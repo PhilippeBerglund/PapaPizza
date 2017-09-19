@@ -44,13 +44,11 @@ namespace PapaPizza.Controllers
             var newOrder = new OrderViewModel
             {
                 Cart = cart,
-
             };
 
             if (User.Identity.IsAuthenticated)
             {
                 newOrder.UserVM = user;
-             
             }
 
             return View(newOrder);
@@ -61,21 +59,20 @@ namespace PapaPizza.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OrderIndex(OrderViewModel model)
         {
-            var cartId = HttpContext.Session.GetInt32("CartSession");
-            var order = new Order
-            {
-                CartId = cartId,
-                User = model.UserVM
-            };
+               var cartId = HttpContext.Session.GetInt32("CartSession");
+               var order = new Order
+                {
+                    CartId = cartId,
+                    User = model.UserVM
+                };
 
-            _context.Order.Add(order);
-            _context.SaveChanges();
+                _context.Order.Add(order);
+                _context.SaveChanges();
 
-            HttpContext.Session.Remove("CartSession");
+                 HttpContext.Session.Remove("CartSession");
 
-             return View ( "OrderConfirm",  order);
+                return View("OrderConfirm", order);
         }
-
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
