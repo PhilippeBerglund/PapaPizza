@@ -1,0 +1,53 @@
+﻿@model PapaPizza.Models.ApplicationUser
+
+
+<form asp-action="GuestLogin">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <h4>Enter your details.</h4>
+                <hr/>
+                <div class="form-group">
+                    <label asp-for="FirstName">First name</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName">Last name</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Street"></label>
+                    <input asp-for="Street" class="form-control" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+            </div>
+            <br/><br/><br/>
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label asp-for="City"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Zip"></label>
+                    <input asp-for="Zip" class="form-control" />
+                    <span asp-validation-for="Zip" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CreditCardNumber">Credit card no</label>
+                    <input asp-for="CreditCardNumber" class="form-control" />
+                    <span asp-validation-for="CreditCardNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" value="GuestLogin" class="btn btn-default">Enter</button>
+       </div>
+                   
+
+    </form>

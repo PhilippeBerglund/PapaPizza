@@ -15,77 +15,67 @@
 }
 <div class="row">
     <div class="col-md-12">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Name)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Category)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Price)
-                        </th>
-                        <th>
-                            <span>Add to Cart</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        <span>Add to Cart</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
             {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                                <br />
-                                @*@foreach (var ingredient in item.DishIngredients)
-                                    {
-                                        <span>@ingredient.Ingredient.Name</span>
-                                    }*@
-                                @IngredientService.AddedIngredients(item.DishId)
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                            <br />
+                            @IngredientService.AddedIngredients(item.DishId)
 
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Category.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Price)
-                            </td>
-                            <td>
-                                @if (!User.IsInRole("Admin"))
-                                {
-                                    @*<a asp-action="AddToCart" asp-route-id="@item.DishId">
-                                            <i class="glyphicon glyphicon-shopping-cart"></i>
-                                        </a>*@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @if (!User.IsInRole("Admin"))
+                            {
+                                ///Todo Change a to sumbit
+                                @*<input type="submit" value="Save" class="btn btn-default" />*@
 
-                                    ///Todo Change a to sumbit
-                                    @*<input type="submit" value="Save" class="btn btn-default" />*@
-
-                                    <a asp-controller="Cart" asp-action="ItemToCart" asp-route-id="@item.DishId">
-                                     <i id="cart" class="glyphicon glyphicon-shopping-cart" ></i>
-                                    </a>
-
-                                }
-                            </td>
-
-                            @if (User.IsInRole("Admin"))
-                {
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.DishId">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.DishId">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.DishId">Delete</a>
-                                </td>
+                                <a asp-controller="Cart" asp-action="ItemToCart" asp-route-id="@item.DishId">
+                                    <i id="cart" class="glyphicon glyphicon-shopping-cart"></i>
+                                </a>
                             }
-                        </tr>
+                        </td>
 
-                    }
-                </tbody>
-            </table>
+                        @if (User.IsInRole("Admin"))
+                {
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.DishId">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.DishId">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.DishId">Delete</a>
+                            </td>
+                        }
+                    </tr>
+
+                }
+            </tbody>
+        </table>
     </div>
     @*<div class="col-md-4" style="background-color:palevioletred">
             <h4>Your Order</h4>
             @await Html.PartialAsync(  _LoginPartial);
         </div>*@
 </div>
-

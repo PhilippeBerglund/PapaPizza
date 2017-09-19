@@ -32,6 +32,7 @@ namespace PapaPizza.Data
             var adminUserResult = userManager.CreateAsync(adminUser, "Pa$$w0rd").Result;
 
             userManager.AddToRoleAsync(adminUser, "Admin");
+            userManager.AddToRoleAsync(aUser, "aUser");
 
             if (context.Dishes.ToList().Count == 0)
             {

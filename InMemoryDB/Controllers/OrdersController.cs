@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PapaPizza.Data;
 using PapaPizza.Models;
+using PapaPizza.Models.OrderViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
@@ -26,162 +27,226 @@ namespace PapaPizza.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult>  OrderIndex()
+        public async Task<IActionResult> OrderIndex(int? session, ApplicationUser guest)
         {
-            //var applicationDbContext = _context.Order.Include(o => o.MyCart);
+            session = HttpContext.Session.GetInt32("CartSession");
+            var user = await _userManager.GetUserAsync(User);
+            //if (User.Identity.IsAuthenticated)
+            //{
 
-            var catList = _context.Categories.ToListAsync();
+                var catList = _context.Categories.ToListAsync();
+                var cart = _context.Cart
+                   .Include(c => c.CartItems)
+                   .ThenInclude(ci => ci.Dish)
+                   .ThenInclude(d => d.DishIngredients)
+                   .ThenInclude(di => di.Ingredient)
+                   .Include(cii => cii.CartItems)
+                   .ThenInclude(ci => ci.CartItemIngredients)
+                   .ThenInclude(cii => cii.Ingredient)
+                                   .FirstOrDefault(m => m.CartId == session);
 
-            var cart = _context.Cart
-               .Include(c => c.CartItems)
-               .ThenInclude(ci => ci.Dish)
-               .ThenInclude(d => d.DishIngredients)
-               .ThenInclude(di => di.Ingredient)
-               .Include(cii => cii.CartItems)
-               .ThenInclude(ci => ci.CartItemIngredients);
+            if (user != null)
+            {
 
-            return View(cart);
-            //return View(await applicationDbContext.ToListAsync());
+                var newOrder = new OrderViewModel
+                {
+                    Cart = cart,
+                    ApplicationUser = user,
+                    Order = new Order
+                    {
+                        ApplicationUserId = user.Id,
+                        CartId = cart.CartId
+                    }
+                };
+
+                return View(newOrder);
+            }
+            else if(guest.Id != null )
+            {
+                var newGuest = guest.FirstName;
+
+                return View("OrderIndex",newGuest);
+              
+            }
+            else return RedirectToAction("Login", "Account");
         }
 
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OrderIndex(Cart cart)
+        {
+            var newCart = cart;
+            var cartId = HttpContext.Session.GetInt32("CartSession");
+            return View(newCart);
+        }
 
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
-    {
-        if (id == null)
         {
-            return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Order
+                .Include(o => o.MyCart)
+                .SingleOrDefaultAsync(m => m.id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
         }
 
-        var order = await _context.Order
-            .Include(o => o.MyCart)
-            .SingleOrDefaultAsync(m => m.id == id);
-        if (order == null)
+        // GET: Orders/Create
+        public IActionResult Create()
         {
-            return NotFound();
+            ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId");
+            return View();
         }
 
-        return View(order);
-    }
-
-    // GET: Orders/Create
-    public IActionResult Create()
-    {
-        ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId");
-        return View();
-    }
-
-    // POST: Orders/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("id,ApplicationUserId,CartId")] Order order)
-    {
-        if (ModelState.IsValid)
+        // POST: Orders/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("id,ApplicationUserId,CartId")] Order order)
         {
-            _context.Add(order);
+            if (ModelState.IsValid)
+            {
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(OrderIndex));
+            }
+            ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
+            return View(order);
+        }
+
+        // GET: Orders/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Order.SingleOrDefaultAsync(m => m.id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
+            return View(order);
+        }
+
+        // POST: Orders/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("id,ApplicationUserId,CartId")] Order order)
+        {
+            if (id != order.id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(order);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OrderExists(order.id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(OrderIndex));
+            }
+            ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
+            return View(order);
+        }
+
+        // GET: Orders/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Order
+                .Include(o => o.MyCart)
+                .SingleOrDefaultAsync(m => m.id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        // POST: Orders/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var order = await _context.Order.SingleOrDefaultAsync(m => m.id == id);
+            _context.Order.Remove(order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(OrderIndex));
         }
-        ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
-        return View(order);
-    }
 
-    // GET: Orders/Edit/5
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id == null)
+        private bool OrderExists(int id)
         {
-            return NotFound();
+            return _context.Order.Any(e => e.id == id);
         }
 
-        var order = await _context.Order.SingleOrDefaultAsync(m => m.id == id);
-        if (order == null)
-        {
-            return NotFound();
-        }
-        ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
-        return View(order);
-    }
 
-    // POST: Orders/Edit/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("id,ApplicationUserId,CartId")] Order order)
-    {
-        if (id != order.id)
+        [HttpGet]
+        public IActionResult GuestLogin( )
         {
-            return NotFound();
-        }
+            var session = HttpContext.Session.GetInt32("CartSession");
 
-        if (ModelState.IsValid)
-        {
-            try
+            var guest = new ApplicationUser
             {
-                _context.Update(order);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+                FirstName = "",
+                LastName = "",
+                Street ="",
+                City ="",
+                PhoneNumber ="",
+                CreditCardNumber ="",
+            };
+            return View(guest);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GuestLogin( ApplicationUser guest )
+        {
+            if (guest == null)
             {
-                if (!OrderExists(order.id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                NotFound();
             }
-            return RedirectToAction(nameof(OrderIndex));
+            var session = HttpContext.Session.GetInt32("CartSession");
+            guest = new ApplicationUser
+            {
+                FirstName = guest.FirstName
+            };
+            _context.ApplicationUsers.Add(guest);
+            _context.SaveChanges();
+            return RedirectToAction("OrderIndex" , guest);
         }
-        ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
-        return View(order);
     }
-
-    // GET: Orders/Delete/5
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var order = await _context.Order
-            .Include(o => o.MyCart)
-            .SingleOrDefaultAsync(m => m.id == id);
-        if (order == null)
-        {
-            return NotFound();
-        }
-
-        return View(order);
-    }
-
-    // POST: Orders/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var order = await _context.Order.SingleOrDefaultAsync(m => m.id == id);
-        _context.Order.Remove(order);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(OrderIndex));
-    }
-
-    private bool OrderExists(int id)
-    {
-        return _context.Order.Any(e => e.id == id);
-    }
-
-
-    public IActionResult GuestOrder()
-    {
-        return RedirectToAction("OrderIndex");
-    }
-}
 }

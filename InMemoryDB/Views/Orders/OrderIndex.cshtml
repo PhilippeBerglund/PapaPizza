@@ -1,15 +1,14 @@
-﻿@model PapaPizza.Models.Cart
+﻿@model PapaPizza.Models.OrderViewModel.OrderViewModel
 @inject PapaPizza.Services.CartService cartService
 @{
     ViewData["Title"] = "Index";
 }
 <h2>Order Index</h2>
 
-@if (Model.ApplicationUser.UserName == null )
-{
-    <span >Reggar denna gubbe nu</span>
-
-}
+<form asp-action="OrderIndex" asp-controller="Orders">
+    <input asp-for="ApplicationUser.FirstName" />
+    <label asp-for="ApplicationUser.FirstName"></label>
+</form>
 
 <table class="table">
     <thead>
@@ -34,7 +33,7 @@
                 @Html.DisplayFor(modelItem => item.CartItems)
             </td>*@
 
-        @foreach (var dish in Model.CartItems)
+        @foreach (var dish in Model.Cart.CartItems)
             {
             <tr>
                 <td>
@@ -64,7 +63,7 @@
                 <b>Total:</b>
             </td>
             <td>
-                <span>@cartService.TotalCartSum(Model.CartItems.Select(i => i.CartItemId).FirstOrDefault())</span>
+                <span>@cartService.TotalCartSum(Model.Cart.CartItems.Select(i => i.CartItemId).FirstOrDefault())</span>
             </td>
         </tr>
 

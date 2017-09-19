@@ -36,7 +36,7 @@ namespace PapaPizza.Controllers
 
             if (id == null)
             {
-                return NotFound("No Dish was Selected, EVER");
+                return NotFound();
             }
 
             // test->
@@ -137,9 +137,8 @@ namespace PapaPizza.Controllers
             return View();
         }
 
+        
         // POST: Carts/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CartId,ApplicationUserId")] Cart cart)
