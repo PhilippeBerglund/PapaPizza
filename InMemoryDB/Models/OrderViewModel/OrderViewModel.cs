@@ -9,6 +9,6 @@ namespace PapaPizza.Models.OrderViewModel
     {
         public Order Order { get; set; }
         public Cart Cart { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser UserVM { get; set; }
     }
 }

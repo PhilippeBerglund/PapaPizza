@@ -30,7 +30,7 @@ namespace PapaPizza.Controllers
         }
 
         // GET: CartItems
-        public IActionResult CartIndex(int? id)
+        public async Task<IActionResult> CartIndex(int? id)
         {
             id = HttpContext.Session.GetInt32("CartSession");
 
@@ -47,8 +47,8 @@ namespace PapaPizza.Controllers
             //}
             // end test<-
 
-            var catList = _context.Categories.ToListAsync();
-            var cart = _context.Cart
+            var catList = await _context.Categories.ToListAsync();
+            var cart =   _context.Cart
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.CartItemIngredients)
                 .ThenInclude(cii => cii.Ingredient)
@@ -58,7 +58,7 @@ namespace PapaPizza.Controllers
                 .ThenInclude(di => di.Ingredient)
                 .FirstOrDefault(m => m.CartId == id);
 
-            return View(cart);
+             return  View( cart);
 
         }
 

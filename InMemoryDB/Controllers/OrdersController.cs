@@ -51,7 +51,7 @@ namespace PapaPizza.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                newOrder.ApplicationUser = user;
+                newOrder.UserVM = user;
 
                 //var catList = _context.Categories.ToListAsync();
                 //var cart = _context.Cart

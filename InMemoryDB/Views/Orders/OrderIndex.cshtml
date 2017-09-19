@@ -45,24 +45,55 @@
 </table>
 
 <form asp-action="OrderIndex" asp-controller="Orders">
-    <input asp-for="ApplicationUser.FirstName" />
-    <label asp-for="ApplicationUser.FirstName"></label>
-    <span asp-validation-for="ApplicationUser.FirstName" class="text-danger"></span>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UserVM.FirstName"></label>
+                <input asp-for="UserVM.FirstName" class="form-control" />
+                <span asp-validation-for="UserVM.FirstName" class="text-danger"></span>
+                <br />
+                <label asp-for="UserVM.LastName"></label>
+                <input asp-for="UserVM.LastName" class="form-control"/>
+                <span asp-validation-for="UserVM.LastName" class="text-danger"></span>
+                <br />
+                <label asp-for="UserVM.Street"></label>
+                <input asp-for="UserVM.Street" class="form-control" />
+                <span asp-validation-for="UserVM.Street" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UserVM.Zip"></label>
+                <input asp-for="UserVM.Zip" class="form-control" />
+                <span asp-validation-for="UserVM.Zip" class="text-danger"></span>
+                <br/>
+                <label asp-for="UserVM.City"></label>
+                <input asp-for="UserVM.City" class="form-control" />
+                <span asp-validation-for="UserVM.City" class="text-danger"></span>
+                <br />
+                <label asp-for="UserVM.CreditCardNumber"></label>
+                <input asp-for="UserVM.CreditCardNumber" class="form-control" />
+                <span asp-validation-for="UserVM.CreditCardNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="UserVM.PhoneNumber">Phone number</label>
+                <input asp-for="UserVM.PhoneNumber" class="form-control" />
+                <span asp-validation-for="UserVM.PhoneNumber" class="text-danger"></span>
+                <br />
+                <label asp-for="UserVM.Email"></label>
+                <input asp-for="UserVM.Email" class="form-control" />
+                <span asp-validation-for="UserVM.Email" class="text-danger"></span>
 
-    <input asp-for="ApplicationUser.LastName" />
-    <label asp-for="ApplicationUser.LastName"></label>
-    <span asp-validation-for="ApplicationUser.LastName" class="text-danger"></span>
-
-    <input asp-for="ApplicationUser.Street" />
-    <label asp-for="ApplicationUser.Street"></label>
-    <span asp-validation-for="ApplicationUser.Street" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
 
 
-
-    
 
     <input type="button" class="btn btn-info" onclick="history.go(-1)" value="Return to Cart" />
-
+    &nbsp;&nbsp;
     <button type="submit" class="btn btn-success">Buy</button>
 </form>
 
