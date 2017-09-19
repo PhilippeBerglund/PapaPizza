@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace PapaPizza.Models.OrderViewModel
+﻿namespace PapaPizza.Models.OrderViewModel
 {
     public class OrderViewModel
     {

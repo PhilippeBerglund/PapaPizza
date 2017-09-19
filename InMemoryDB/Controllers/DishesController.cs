@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,7 +7,6 @@ using PapaPizza.Data;
 using PapaPizza.Models;
 using Microsoft.AspNetCore.Http;
 using PapaPizza.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace PapaPizza.Controllers
@@ -72,8 +69,6 @@ namespace PapaPizza.Controllers
         }
 
         // POST: Dishes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DishId,Name,Price, CategoryId")] Dish dish, IFormCollection form)
@@ -94,7 +89,7 @@ namespace PapaPizza.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-           return View(dish);
+            return View(dish);
         }
 
         // GET: Dishes/Edit/5
@@ -120,8 +115,6 @@ namespace PapaPizza.Controllers
         }
 
         // POST: Dishes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
@@ -157,8 +150,6 @@ namespace PapaPizza.Controllers
                             checkboxAnswer = form.Keys.Any(x => x == $"checkboxes-{ingredient.IngredientId}")
                         };
                         dishToEdit.DishIngredients.Add(dishIngredient);
-                   //     _context.DishIngredients.Add(dishIngredient);
-                       // await _context.SaveChangesAsync();
                     }
                     await _context.SaveChangesAsync();
                 }
@@ -210,48 +201,6 @@ namespace PapaPizza.Controllers
         private bool DishExists(int id)
         {
             return _context.Dishes.Any(e => e.DishId == id);
-        }
-
-
-        // GET: Dishes/AddToCart/6
-        public async Task<IActionResult> AddToCart(int? id)
-        {
-            //var cartItem = await _context.CartItems
-            //    .SingleOrDefaultAsync(c => c.CartId == id);
-            // if (cartItem == null)
-            // {
-            //     // Create a new cart item if no cart item exists
-            //     cartItem = new CartItem
-            //     {
-            //         name = id
-            //     };
-
-            // }
-
-            // else
-            // {
-            //     return View(cartItem);
-            // }
-            //// var dish = await _context.Dishes
-            ////.SingleOrDefaultAsync(m => m.DishId == id);
-            //// if (dish == null)
-            //// {
-            ////     return NotFound();
-            //// }
-
-            return RedirectToAction("Index");
-            // return View(cartItem);
-        }
-
-        // POST: Dishes/AddToCart/6
-        [HttpPost, ActionName("AddToCart")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddToCart(int id)
-        {
-            var d = id.ToString();
-
-            return RedirectToAction("Index");
-            // return RedirectToAction(nameof(Index));
         }
     }
 }

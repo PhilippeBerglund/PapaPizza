@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -12,8 +8,6 @@ using PapaPizza.Data;
 using PapaPizza.Models;
 using PapaPizza.Services;
 using Microsoft.AspNetCore.Http;
-using PapaPizza.Controllers;
-using Newtonsoft.Json;
 
 namespace PapaPizza
 {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -52,33 +50,6 @@ namespace PapaPizza.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 newOrder.UserVM = user;
-
-                //var catList = _context.Categories.ToListAsync();
-                //var cart = _context.Cart
-                //   .Include(c => c.CartItems)
-                //   .ThenInclude(ci => ci.Dish)
-                //   .ThenInclude(d => d.DishIngredients)
-                //   .ThenInclude(di => di.Ingredient)
-                //   .Include(cii => cii.CartItems)
-                //   .ThenInclude(ci => ci.CartItemIngredients)
-                //   .ThenInclude(cii => cii.Ingredient)
-                //                   .FirstOrDefault(m => m.CartId == session);
-
-                //var newOrder = new OrderViewModel
-                //{
-                //    Cart = cart,
-                //    //ApplicationUser = user,
-                //    ApplicationUser = new ApplicationUser
-                //    {
-                //        FirstName = user.FirstName,
-                //        LastName = user.LastName,
-                //        Street = user.Street,
-                //        Zip = user.Zip,
-                //        City = user.City,
-                //        Email = user.Email,
-                //        PhoneNumber = user.PhoneNumber
-                //    }
-                //};
              
             }
 
@@ -86,57 +57,23 @@ namespace PapaPizza.Controllers
         }
 
 
-        //}
-        //            Order = new Order
-        //            {
-        //                ApplicationUserId = user.Id,
-        //                CartId = cart.CartId
-        //            }
-        //        };
-
-        //        if (user != null)
-        //    {
-
-        //        var newOrder = new OrderViewModel
-        //        {
-        //            Cart = cart,
-        //            ApplicationUser = user,
-        //            Order = new Order
-        //            {
-        //                ApplicationUserId = user.Id,
-        //                CartId = cart.CartId
-        //            }
-        //        };
-
-        //        return View(newOrder);
-        //    }
-        //    else if(guest.Id != null )
-        //    {
-        //        var newGuest = guest.FirstName;
-
-        //        return View("OrderIndex",newGuest);
-
-        //    }
-        //    else return RedirectToAction("Login", "Account");
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OrderIndex(OrderViewModel model)
         {
-           var cartId = HttpContext.Session.GetInt32("CartSession");
+            var cartId = HttpContext.Session.GetInt32("CartSession");
             var order = new Order
             {
                 CartId = cartId,
-                User = model.ApplicationUser
+                User = model.UserVM
             };
-            //order.User.Email = model.ApplicationUser.HomeEmail;
 
             _context.Order.Add(order);
             _context.SaveChanges();
 
             HttpContext.Session.Remove("CartSession");
 
-             return View("OrderConfirm", order);
+             return View ( "OrderConfirm",  order);
         }
 
 
@@ -167,8 +104,6 @@ namespace PapaPizza.Controllers
         }
 
         // POST: Orders/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,ApplicationUserId,CartId")] Order order)
@@ -201,8 +136,6 @@ namespace PapaPizza.Controllers
         }
 
         // POST: Orders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,ApplicationUserId,CartId")] Order order)

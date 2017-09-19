@@ -12,35 +12,6 @@
 
 <h4>@Model.Dish.Name</h4>
 
-@*<h4>@cartService.TotalCartSum(Model.CartItemId)</h4>*@
-
-@*@foreach (var item in ingredientService.GetIngredients())
-    {
-
-        if (Model.CartItemIngredients.Any(x => x.IngredientId == item.IngredientId && x.Enabled))
-        {
-
-            <input checked type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-                <label asp-for="@item.Name">@item.Name</label>
-                                    <br />
-        }
-        else
-        {
-            <input type="checkbox" name="checkboxes-@item.IngredientId" value="checkboxes-@item.IngredientId" />
-                <label asp-for="@item.Name">@item.Name</label>
-                                    <br />
-        }
-
-        // behövs inte
-        @if (item.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
-            {
-                @foreach (var i in item.Dish.DishIngredients)
-                {
-                    <span>@i.IngredientId</span>
-                }
-            }
-    }*@
-@*<h4>@Html.DisplayNameFor(m => m.CartItems)</h4>*@
 <hr />
 <div class="row">
     <div class="col-md-6">
@@ -69,11 +40,6 @@
                 }
 
             }
-            @*<div class="form-group">
-                    <label asp-for="ApplicationUserId" class="control-label"></label>
-                    <input asp-for="ApplicationUserId" class="form-control" />
-                    <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
-                </div>*@
             <br/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-info" />
@@ -86,7 +52,6 @@
         </div>
     </div>
 </div>
-
 
 <div>
     <a asp-action="CartIndex">Back to List!</a>

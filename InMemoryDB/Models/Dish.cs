@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace PapaPizza.Models
 {
@@ -12,13 +9,6 @@ namespace PapaPizza.Models
         public decimal Price { get; set; }
         public Category Category { get; set; }
         public int CategoryId { get; set; }
-
-        //// phbe04
-      //  public CartItem CartItem { get; set; }
-        //public int CartItemId { get; set; }
-
         public List<DishIngredient> DishIngredients { get; set; }
-
-
     }
 }

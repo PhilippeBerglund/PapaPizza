@@ -5,7 +5,6 @@ using PapaPizza.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace PapaPizza.Services
@@ -22,7 +21,6 @@ namespace PapaPizza.Services
             _ingredientService = ingredientService;
         }
 
-        //Todo FIX->
         public void EmptyCart(int? id)
         {
             if (id == null)
@@ -50,14 +48,12 @@ namespace PapaPizza.Services
             return id;
         }
 
-        //Todo FIX->
         public void RemoveCartItem(int? id)
         {
             var item = _context.CartItems.FirstOrDefault(m => m.CartItemId == id);
             _context.CartItems.Remove(item);
             _context.SaveChangesAsync();
         }
-        // dishid added-->
         public decimal ModifiedCartItemPrice ( int cartItemId, List<CartItemIngredient> cartItemIngredients, int dishID)
         {
            
@@ -93,41 +89,7 @@ namespace PapaPizza.Services
                     .DishIngredients.Any(di => di.IngredientId == cii.IngredientId) ? 0 : cii.Ingredient.Price);
             }
             return totalPrice;
-
         }
-
-
-
-
-        // Test
-        public decimal TotalPriceForCart(int id)
-        {
-
-            decimal totalPrice = 0;
-
-            var cart = _context.Cart.Include(x => x.CartItems).ThenInclude(x => x.CartItemIngredients).ThenInclude(x => x.Ingredient).FirstOrDefault(x => x.CartId == id);
-
-            var cartIngredients = _context.CartItemIngredients.Include(x => x.Ingredient).Where(x => x.Enabled);
-
-            foreach (var itemPrice in cart.CartItems)
-            {
-                totalPrice += itemPrice.Dish.Price;
-
-                totalPrice += itemPrice.CartItemIngredients.Where(s => s.Enabled).Sum(cii => itemPrice.Dish
-                    .DishIngredients.Any(di => di.IngredientId == cii.IngredientId) ? 0 : cii.Ingredient.Price);
-            }
-            return totalPrice;
-        }
-
-        //public int GenerateCartItemID()
-        //{
-        //    int _min = 1000;
-        //    int _max = 9999;
-        //    Random _rdm = new Random();
-        //    return _rdm.Next(_min, _max);
-        //}
-
-
 
     }
 }

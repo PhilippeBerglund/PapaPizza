@@ -41,7 +41,6 @@
                         @item.Dish.Category.Name
                     </td>
                     <td>
-                        @*item.Dish.Price*@
                         <span>@cartService.ModifiedCartItemPrice(item.CartItemId, item.CartItemIngredients, item.DishId)</span>
 
                     </td>
@@ -54,15 +53,8 @@
                         <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartItemId">Remove Dish</a>
 
                     </td>
-
-                    @*<td>
-                            <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.CartId">Details</a>
-                            <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.CartId">Remove</a>
-                        </td>*@
                 </tr>
             }
-
 
             <tr>
                 <td>
@@ -71,8 +63,6 @@
                 <td></td>
                 <td>
                     <span>@cartService.TotalCartSum(Model.CartItems.Select(i => i.CartItemId).FirstOrDefault())</span>
-                    @*<span>@cartService.TotalPriceForCart(Model.CartId)</span>*@
-
                 </td>
             </tr>
         }
@@ -80,8 +70,6 @@
 </table>
 
 <br />
-@*@if (Model != null)*@
-
 @{var id = cartService.CheckCart();
 
     <div class="btn btn-default" style="margin: 1%">

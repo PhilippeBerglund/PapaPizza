@@ -13,6 +13,5 @@ namespace PapaPizza.Models
         public int Quantity { get; set; }
 
         public List<CartItemIngredient> CartItemIngredients { get; set; }
-        //public List<Dish> Dishes { get; set; }
     }
 }

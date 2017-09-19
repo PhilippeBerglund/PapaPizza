@@ -1,11 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-
-namespace PapaPizza.Models
+﻿namespace PapaPizza.Models
 {
 
     public class DishIngredient
@@ -16,7 +9,5 @@ namespace PapaPizza.Models
         public Ingredient Ingredient { get; set; }
 
         public bool checkboxAnswer { get; set; }
-
-
     }
 }

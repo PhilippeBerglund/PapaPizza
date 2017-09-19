@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace PapaPizza.Models
+﻿namespace PapaPizza.Models
 {
     public class Order
     {
@@ -13,7 +8,5 @@ namespace PapaPizza.Models
 
         public Cart MyCart { get; set; }
         public int? CartId { get; set; }
-
-       // public List<CartItem> CartItems { get; set; }
     }
 }
