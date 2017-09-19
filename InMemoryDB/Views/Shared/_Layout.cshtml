@@ -1,5 +1,6 @@
 ﻿@using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http
+@inject PapaPizza.Services.CartService cartService
 <!DOCTYPE html>
 
 <html>
@@ -37,11 +38,12 @@
                     <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Shop</a></li>
 
                     @if (!User.IsInRole("Admin"))
-                    {
-                        var  id = Context.Session.GetInt32("CartSession");
-
-                        if (id != null)
                         {
+                            //var  id = Context.Session.GetInt32("CartSession");
+
+                            var cartItem = cartService.IsCartItem();
+                            if (cartItem != null)
+                            {
                         <li>
                             <a asp-controller="Cart" asp-action="CartIndex" title="@ViewBag.CartSummary">
                                 Your Cart

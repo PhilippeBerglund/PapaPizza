@@ -91,5 +91,10 @@ namespace PapaPizza.Services
             return totalPrice;
         }
 
+        public CartItem IsCartItem()
+        {
+            return _context.CartItems.SingleOrDefault();  
+        }
+
     }
 }
