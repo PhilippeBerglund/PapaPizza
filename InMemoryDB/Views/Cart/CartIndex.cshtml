@@ -94,18 +94,6 @@
             <a asp-controller="Cart" asp-action="EmptyCart" style="text-decoration:none" asp-route-id="@id">Empty Cart</a>
         </div>
 
-        //--------------------------------------------------
-        if (User.IsInRole("User"))
-        {
-            <a class="btn btn-primary" asp-action="Payment" asp-controller="Payment">User Checkout</a>
-        }
-        else
-        {
-                <a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="Payment">Guest Checkout</a>
-        }
-
-        //-----------------------------------------------
-
         <div class="btn btn-default" style="margin: 1%">
             <a asp-controller="Orders" asp-action="OrderIndex" style="text-decoration:none" asp-route-id="@id">Checkout</a>
         </div>

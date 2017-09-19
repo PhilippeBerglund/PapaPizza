@@ -21,10 +21,6 @@ namespace PapaPizza.Models.AccountViewModels
         public string Street { get; set; }
 
         [Required]
-        [Display(Name = "Street No")]
-        public string StreetNo { get; set; }
-
-        [Required]
         [Display(Name = "Zip code")]
         public string Zip { get; set; }
 

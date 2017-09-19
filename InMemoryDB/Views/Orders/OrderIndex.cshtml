@@ -1,43 +1,46 @@
-﻿@model IEnumerable<PapaPizza.Models.Cart>
+﻿@model PapaPizza.Models.Cart
 @inject PapaPizza.Services.CartService cartService
 @{
     ViewData["Title"] = "Index";
 }
 <h2>Order Index</h2>
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>*@
+
+@if (Model.ApplicationUser.UserName == null )
+{
+    <span >Reggar denna gubbe nu</span>
+
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CartItems)
+                <span>Cart items</span>
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.CartItems.Dish.Name)*@
                 <span>Price</span>
             </th>
         </tr>
     </thead>
     <tbody>
 
-        @foreach (var item in Model)
-        {
+        @*@foreach (var item in Model)
+            {*@
 
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.ApplicationUserId)
-                </td>*@
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.CartItems)
-                </td>*@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.ApplicationUserId)
+            </td>*@
+        @*<td>
+                @Html.DisplayFor(modelItem => item.CartItems)
+            </td>*@
 
-            @foreach (var dish in item.CartItems)
+        @foreach (var dish in Model.CartItems)
             {
-                <tr>
-                    <td>
-                        <b>@dish.Dish.Name</b>
-                        <br/>
-                        @*@if (dish.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
+            <tr>
+                <td>
+                    <b>@dish.Dish.Name</b>
+                    <br />
+                    @*@if (dish.Dish.DishIngredients.Any(x => x.checkboxAnswer == true))
                         {
                             @foreach (var it in dish.Dish.DishIngredients)
                             {
@@ -45,26 +48,30 @@
                             }
                             @item.CartItemIngredients
                         }*@
-                        @*@Html.DisplayNameFor(model => i.Dish.Name)*@
-                    </td>
-                    <td>
-                        @dish.Dish.Price
-                    </td>
-                </tr>
-            }
-            <tr>
-                <td>
-                    <b>Total:</b>
+                    @*@Html.DisplayNameFor(model => i.Dish.Name)*@
                 </td>
                 <td>
-                    <span>@cartService.TotalCartSum(item.CartId)</span>
+                    @*@dish.Dish.Price*@
+                    <span>
+                        @cartService.ModifiedCartItemPrice(dish.CartItemId, dish.CartItemIngredients, dish.DishId)
+                    </span>
+
                 </td>
             </tr>
         }
+        <tr>
+            <td>
+                <b>Total:</b>
+            </td>
+            <td>
+                <span>@cartService.TotalCartSum(Model.CartItems.Select(i => i.CartItemId).FirstOrDefault())</span>
+            </td>
+        </tr>
+
     </tbody>
 </table>
 
-<input type="button" class ="btn btn-info"onclick="history.go(-1)" value="Return to Cart" />
+<input type="button" class="btn btn-info" onclick="history.go(-1)" value="Return to Cart" />
 
 <a class="btn btn-success" asp-action="Buy" asp-route-id="">Buy</a>
 

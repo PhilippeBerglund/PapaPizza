@@ -20,7 +20,6 @@ namespace PapaPizza.Controllers
         private readonly ApplicationDbContext _context;
         private readonly CartService _cartService;
         private readonly IngredientService _ingredientService;
-        //private readonly HttpContext httpContext;
         int cartID { get; set; }
 
         public CartController(ApplicationDbContext context, CartService cartService, IngredientService ingredientService)
@@ -124,11 +123,6 @@ namespace PapaPizza.Controllers
                 };
                 cartItem.CartItemIngredients.Add(cartItemIngredient);
             }
-
-            // mir tror 
-            //var ingredients = _context.CartItemIngredients.Include(c => c.Ingredient)
-            //    .ThenInclude(ci => ci.DishIngredients)
-            //    .FirstOrDefault(d => d.IngredientId == id && d.Enabled);
 
             cart.CartItems.Add(cartItem);
 
