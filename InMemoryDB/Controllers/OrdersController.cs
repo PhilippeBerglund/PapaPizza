@@ -66,7 +66,9 @@ namespace PapaPizza.Controllers
                 ThenInclude(ci => ci.Dish)
                 .FirstOrDefault(m => m.CartId == cartId);
 
-               var order = new Order
+            if (ModelState.IsValid)
+            {
+                var order = new Order
                 {
                     MyCart = myCart,
                     CartId = cartId,
@@ -76,11 +78,29 @@ namespace PapaPizza.Controllers
                 _context.Order.Add(order);
                 _context.SaveChanges();
 
-                 HttpContext.Session.Remove("CartSession");
-            var cartItem = _context.Order.Select(s => s.MyCart.CartItems).FirstOrDefault();
-            _context.CartItems.Remove(cartItem.FirstOrDefault());
+                HttpContext.Session.Remove("CartSession");
+                var cartItem = _context.Order.Select(s => s.MyCart.CartItems).FirstOrDefault();
+                _context.CartItems.Remove(cartItem.FirstOrDefault());
 
-                return View( "OrderConfirm", order);
+                return View("OrderConfirm", order);
+            }
+
+            var cart = _context.Cart
+               .Include(c => c.CartItems)
+               .ThenInclude(ci => ci.CartItemIngredients)
+               .ThenInclude(cii => cii.Ingredient)
+               .Include(c => c.CartItems)
+               .ThenInclude(ci => ci.Dish)
+               .ThenInclude(d => d.DishIngredients)
+               .ThenInclude(di => di.Ingredient)
+               .FirstOrDefault(m => m.CartId == cartId);
+
+
+            var newOrder = new OrderViewModel
+            {
+                Cart = cart,
+            };
+            return View (newOrder);
         }
 
         // GET: Orders/Details/5
@@ -107,21 +127,6 @@ namespace PapaPizza.Controllers
         {
             ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId");
             return View();
-        }
-
-        // POST: Orders/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,ApplicationUserId,CartId")] Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(OrderIndex));
-            }
-            ViewData["CartId"] = new SelectList(_context.Cart, "CartId", "CartId", order.CartId);
-            return View(order);
         }
 
         // GET: Orders/Edit/5
