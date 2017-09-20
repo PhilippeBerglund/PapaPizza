@@ -42,7 +42,7 @@
                             //var  id = Context.Session.GetInt32("CartSession");
 
                             var cartItem = cartService.IsCartItem();
-                            if (cartItem != null)
+                            if (cartItem.Result != null)
                             {
                         <li>
                             <a asp-controller="Cart" asp-action="CartIndex" title="@ViewBag.CartSummary">

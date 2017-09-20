@@ -5,7 +5,7 @@ using PapaPizza.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 namespace PapaPizza.Services
 {
@@ -90,10 +90,14 @@ namespace PapaPizza.Services
             }
             return totalPrice;
         }
-
-        public CartItem IsCartItem()
+        /// <summary>
+        /// 
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CartItem> IsCartItem()
         {
-            return _context.CartItems.SingleOrDefault();  
+            return await _context.CartItems.FirstOrDefaultAsync();  
         }
 
     }

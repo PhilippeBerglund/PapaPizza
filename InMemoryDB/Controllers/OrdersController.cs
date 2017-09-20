@@ -70,6 +70,8 @@ namespace PapaPizza.Controllers
                 _context.SaveChanges();
 
                  HttpContext.Session.Remove("CartSession");
+            var cartItem = _context.Order.Select(s => s.MyCart.CartItems).FirstOrDefault();
+            _context.CartItems.Remove(cartItem.FirstOrDefault());
 
                 return View("OrderConfirm", order);
         }

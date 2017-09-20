@@ -32,7 +32,7 @@ namespace PapaPizza.Controllers
 
             if (id == null)
             {
-                return NotFound();
+                return View();
             }
 
             // test->
@@ -243,16 +243,6 @@ namespace PapaPizza.Controllers
              _cartService.EmptyCart(id);
             return RedirectToAction (nameof( CartIndex));
         }
-
-        //public async Task<IActionResult> RemoveFromCart(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    _cartService.RemoveCartItem(id);
-        //    return View("CartIndex");
-        //}
 
         // GET: Dishes/Delete/5
         public async Task<IActionResult> RemoveFromCart(int? id)
