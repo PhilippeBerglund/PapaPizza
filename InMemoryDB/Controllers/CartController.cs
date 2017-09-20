@@ -254,6 +254,7 @@ namespace PapaPizza.Controllers
             }
 
             var cartItem = await _context.CartItems
+                .Include(d => d.Dish)
                 .SingleOrDefaultAsync(m => m.CartItemId == id);
             if (cartItem == null)
             {
