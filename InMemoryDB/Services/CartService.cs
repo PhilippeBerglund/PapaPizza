@@ -90,11 +90,7 @@ namespace PapaPizza.Services
             }
             return totalPrice;
         }
-        /// <summary>
-        /// 
-        ///
-        /// </summary>
-        /// <returns></returns>
+
         public async Task<CartItem> IsCartItem()
         {
             return await _context.CartItems.FirstOrDefaultAsync();  

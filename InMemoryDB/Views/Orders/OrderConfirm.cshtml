@@ -7,7 +7,16 @@
 
 <h4>Thanks @Model.User.FirstName for your order!</h4>
 
-<span>Yor delivery will arrive shortly</span>
+<span>Your delivery will arrive shortly</span>
+<br/>
+<b>Items: </b>
+<br/>
+<div>
+    @foreach (var item in Model.MyCart.CartItems)
+    {
+        <span> @item.Dish.Name <br /></span>
+    }
+</div>
 
 
 

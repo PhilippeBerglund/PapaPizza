@@ -44,6 +44,7 @@ namespace PapaPizza.Controllers
             // end test<-
 
             var catList = await _context.Categories.ToListAsync();
+
             var cart = _context.Cart
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.CartItemIngredients)

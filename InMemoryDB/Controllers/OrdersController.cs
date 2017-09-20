@@ -8,6 +8,7 @@ using PapaPizza.Models;
 using PapaPizza.Models.OrderViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace PapaPizza.Controllers
 {
@@ -57,11 +58,17 @@ namespace PapaPizza.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OrderIndex(OrderViewModel model)
+        public async Task<IActionResult> OrderIndex(OrderViewModel model )
         {
-               var cartId = HttpContext.Session.GetInt32("CartSession");
+            var cartId = HttpContext.Session.GetInt32("CartSession");
+
+            var myCart = _context.Cart.Include(c => c.CartItems).
+                ThenInclude(ci => ci.Dish)
+                .FirstOrDefault(m => m.CartId == cartId);
+
                var order = new Order
                 {
+                    MyCart = myCart,
                     CartId = cartId,
                     User = model.UserVM
                 };
@@ -73,7 +80,7 @@ namespace PapaPizza.Controllers
             var cartItem = _context.Order.Select(s => s.MyCart.CartItems).FirstOrDefault();
             _context.CartItems.Remove(cartItem.FirstOrDefault());
 
-                return View("OrderConfirm", order);
+                return View( "OrderConfirm", order);
         }
 
         // GET: Orders/Details/5
